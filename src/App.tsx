@@ -1,18 +1,7 @@
 import type { ReactNode } from 'react';
 import { Code, Deck, Fragment, Slide } from '@revealjs/react';
 import RevealHighlight from 'reveal.js/plugin/highlight';
-
-type Feature = {
-  title: string;
-  description: string;
-  color: string;
-};
-
-type OrbitPill = {
-  label: string;
-  color: string;
-  positionClass: string;
-};
+import { LanguageProvider, useLang, type Feature } from './i18n';
 
 type SectionHeadingProps = {
   eyebrow: string;
@@ -66,200 +55,6 @@ type ComparePanelProps = {
   footer?: string;
   className?: string;
 };
-
-const heroBadges = [
-  { label: 'Tokens', color: '#60a5fa' },
-  { label: 'Context', color: '#22d3ee' },
-  { label: 'Prompts', color: '#a78bfa' },
-  { label: 'CLI + Skills', color: '#34d399' },
-];
-
-const pricingImpact: Feature[] = [
-  {
-    title: 'Context = cost',
-    description:
-      'Every file, log, and tab you attach is billed as input tokens — even if the model barely uses them.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Sloppy prompts cost twice',
-    description:
-      'A vague ask burns tokens on guessing, then again on the correction. Specificity is now a budget tool.',
-    color: '#c084fc',
-  },
-  {
-    title: 'Premium models multiply',
-    description:
-      'Agent mode and frontier models consume more tokens per turn. Reach for them when the task earns it.',
-    color: '#fb7185',
-  },
-];
-
-const agendaTracks: Feature[] = [
-  {
-    title: 'See the meter',
-    description: 'Read agent logs: how many tokens, which model, which tools, which files.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Tune the context',
-    description: 'Open less, point sharper. Treat the context window as a budget, not a backpack.',
-    color: '#22d3ee',
-  },
-  {
-    title: 'Shape the prompt',
-    description: 'Goal, context, constraints, done-when. Give the agent a PRD, not a wish.',
-    color: '#c084fc',
-  },
-  {
-    title: 'Use the CLI well',
-    description: 'Fleet, research, squad mode, PR fix — plus the right discipline around skills.',
-    color: '#34d399',
-  },
-];
-
-const visibilityChecks: Feature[] = [
-  {
-    title: 'Token totals',
-    description: 'Input + output per turn. Watch the run-rate, not just the final answer.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Model in use',
-    description: 'Frontier vs. mini matters. A small task on a big model is a quiet leak.',
-    color: '#22d3ee',
-  },
-  {
-    title: 'Tool calls',
-    description: 'Each search, read, or run is a turn. Loops without progress are the expensive failure mode.',
-    color: '#a78bfa',
-  },
-  {
-    title: 'Files touched',
-    description: 'If the agent reads files you did not need, your context was too broad.',
-    color: '#fb7185',
-  },
-];
-
-const contextPrinciples: Feature[] = [
-  {
-    title: 'Prime with intent',
-    description: 'Open only the files, errors, and constraints the task actually needs.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Trim the noise',
-    description: 'Skip whole-workspace dumps. Reference the function, selection, or symbol by name.',
-    color: '#38bdf8',
-  },
-  {
-    title: 'Anchor to specifics',
-    description: 'Point at the failing test, the exact log line, the commit SHA — not "the bug".',
-    color: '#c084fc',
-  },
-  {
-    title: 'Reset when it drifts',
-    description: 'Start a fresh thread once the agent is chasing its own earlier mistakes.',
-    color: '#34d399',
-  },
-];
-
-const promptFrame: OrbitPill[] = [
-  { label: 'Goal', color: '#60a5fa', positionClass: 'left-8 top-7' },
-  { label: 'Context', color: '#38bdf8', positionClass: 'right-10 top-10' },
-  { label: 'Constraints', color: '#c084fc', positionClass: 'left-10 bottom-10' },
-  { label: 'Done when', color: '#34d399', positionClass: 'right-8 bottom-7' },
-];
-
-const cliDiscovery: Feature[] = [
-  {
-    title: 'Fleet',
-    description: 'Coordinate parallel investigations across repos without losing the main thread.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Research',
-    description: 'Pull GitHub history, issues, and web evidence into the working context first.',
-    color: '#22d3ee',
-  },
-  {
-    title: 'Chronicle',
-    description: 'Replay sessions, see token usage, and resume from a known good checkpoint.',
-    color: '#a78bfa',
-  },
-];
-
-const cliExecution: Feature[] = [
-  {
-    title: 'Remote',
-    description: 'Run against cloud or sandboxed environments when local context is not enough.',
-    color: '#34d399',
-  },
-  {
-    title: 'Squad Mode',
-    description: 'Split a problem across specialized agents, then merge only the useful outcomes.',
-    color: '#f59e0b',
-  },
-  {
-    title: 'PR Fix',
-    description: 'Triage failing checks, patch the issue, and close the loop from the terminal.',
-    color: '#fb7185',
-  },
-];
-
-const skillsValue: Feature[] = [
-  {
-    title: 'Reusable playbooks',
-    description: 'Bundle prompts, tools, and steps the agent should always follow for a task.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Sharper context',
-    description: 'Skills inject focused instructions so you stop re-typing the same setup.',
-    color: '#22d3ee',
-  },
-  {
-    title: 'Team shareable',
-    description: 'Skills travel through the repo — onboarding and conventions stop living in heads.',
-    color: '#34d399',
-  },
-];
-
-const skillsRisks: Feature[] = [
-  {
-    title: 'Run arbitrary commands',
-    description: 'A skill can call shell, scripts, and tools with your local permissions.',
-    color: '#fb7185',
-  },
-  {
-    title: 'Read your files',
-    description: 'Anything in the workspace is reachable — secrets, tokens, customer data included.',
-    color: '#f59e0b',
-  },
-  {
-    title: 'Reach the network',
-    description: 'Skills can fetch and exfiltrate. A malicious one will look helpful on the way out.',
-    color: '#fbbf24',
-  },
-];
-
-const keyTakeaways: Feature[] = [
-  {
-    title: 'Watch the meter',
-    description: 'Read agent logs every day. Tokens, model, and tool calls tell you where the cost lives.',
-    color: '#60a5fa',
-  },
-  {
-    title: 'Spend on signal',
-    description: 'Narrow context, structured prompts, and clear done-when criteria pay for themselves.',
-    color: '#c084fc',
-  },
-  {
-    title: 'Trust, then verify',
-    description: 'CLI and skills are powerful — vet every skill before it runs in your repo.',
-    color: '#34d399',
-  },
-];
 
 function cn(...values: Array<string | undefined | false>) {
   return values.filter(Boolean).join(' ');
@@ -485,10 +280,47 @@ function ComparePanel({ label, accent, title, bullets, footer, className }: Comp
   );
 }
 
-function App() {
+function LanguageToggle() {
+  const { lang, setLang, t } = useLang();
+  return (
+    <div
+      className="fixed right-5 top-5 z-50 flex items-center gap-1 rounded-full border border-white/15 bg-slate-950/70 p-1 shadow-[0_10px_30px_rgba(2,6,23,0.45)] backdrop-blur"
+      role="group"
+      aria-label={t.toggle.aria}
+    >
+      <button
+        type="button"
+        onClick={() => setLang('tr')}
+        aria-pressed={lang === 'tr'}
+        className={cn(
+          'rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors',
+          lang === 'tr' ? 'bg-blue-400/90 text-slate-950' : 'text-slate-200 hover:text-white',
+        )}
+      >
+        {t.toggle.tr}
+      </button>
+      <button
+        type="button"
+        onClick={() => setLang('en')}
+        aria-pressed={lang === 'en'}
+        className={cn(
+          'rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] transition-colors',
+          lang === 'en' ? 'bg-blue-400/90 text-slate-950' : 'text-slate-200 hover:text-white',
+        )}
+      >
+        {t.toggle.en}
+      </button>
+    </div>
+  );
+}
+
+function Presentation() {
+  const { lang, t } = useLang();
   return (
     <div className="h-screen w-screen bg-transparent">
+      <LanguageToggle />
       <Deck
+        key={lang}
         config={{
           width: 1280,
           height: 720,
@@ -526,24 +358,23 @@ function App() {
               <div className="text-left">
                 <Fragment animation="fade-right" asChild>
                   <div className="mb-5 inline-flex rounded-full border border-blue-300/20 bg-blue-400/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.28em] text-blue-100">
-                    Webinar deck
+                    {t.hero.badge}
                   </div>
                 </Fragment>
 
                 <h1 className="max-w-6xl !text-[3.6rem] !font-black !leading-[1.02] text-white">
-                  GitHub Copilot: Tokens, Tools, and Discipline
+                  {t.hero.title}
                 </h1>
 
                 <Fragment animation="fade-up" asChild>
                   <p className="mt-5 max-w-5xl !text-[1.32rem] !leading-[1.35] text-slate-200">
-                    The move from request-based to token-based pricing changes how every developer
-                    should be using Copilot — in the IDE, in the CLI, and with skills.
+                    {t.hero.subtitle}
                   </p>
                 </Fragment>
 
                 <Fragment animation="fade-up" asChild>
                   <div className="mt-6 flex flex-wrap gap-3">
-                    {heroBadges.map((badge) => (
+                    {t.hero.badges.map((badge) => (
                       <AccentPill
                         key={badge.label}
                         label={badge.label}
@@ -558,15 +389,11 @@ function App() {
               <Fragment animation="fade-left" asChild>
                 <div>
                   <CommandPanel
-                    label="The new mental model"
+                    label={t.hero.cmd.label}
                     accent="#38bdf8"
-                    title="Every token of context you attach is now on the bill."
-                    command='copilot "explain why this PR is failing" --files src/checkout.ts,logs/run-2031'
-                    notes={[
-                      'Bigger workspace context → bigger token bill, every single turn.',
-                      'Premium models multiply the cost — use them when the task earns it.',
-                      'Agent logs show tokens, model, tools. Read them.',
-                    ]}
+                    title={t.hero.cmd.title}
+                    command={t.hero.cmd.command}
+                    notes={t.hero.cmd.notes}
                   />
                 </div>
               </Fragment>
@@ -581,35 +408,25 @@ function App() {
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="What changed"
-                title="From premium requests to token consumption"
-                subtitle="Copilot's billing now reflects the real cost of work: input + output tokens for every turn."
+                eyebrow={t.pricing.eyebrow}
+                title={t.pricing.title}
+                subtitle={t.pricing.subtitle}
               />
 
               <div className="grid grid-cols-2 gap-4">
                 <ComparePanel
-                  label="Before"
+                  label={t.pricing.before.label}
                   accent="#94a3b8"
-                  title="Request-based"
-                  bullets={[
-                    'One chat or agent action ≈ one premium request.',
-                    'A short prompt and a huge one cost the same.',
-                    'Loose context had no direct price tag.',
-                    'Budgeting meant counting requests, not work.',
-                  ]}
-                  footer="Easy to reason about, but it hid the real cost of bloated context."
+                  title={t.pricing.before.title}
+                  bullets={t.pricing.before.bullets}
+                  footer={t.pricing.before.footer}
                 />
                 <ComparePanel
-                  label="Now"
+                  label={t.pricing.now.label}
                   accent="#fb7185"
-                  title="Token-based"
-                  bullets={[
-                    'Input tokens (your context) + output tokens (the answer) are billed.',
-                    'Bigger context, bigger bill — even if the model ignores most of it.',
-                    'Premium models charge more per token; agent loops compound it.',
-                    'Budgeting tracks tokens per task, not requests per day.',
-                  ]}
-                  footer="Specificity and trimmed context are no longer style — they are cost control."
+                  title={t.pricing.now.title}
+                  bullets={t.pricing.now.bullets}
+                  footer={t.pricing.now.footer}
                 />
               </div>
             </div>
@@ -626,22 +443,22 @@ function App() {
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="What it means for you"
-                title="Context discipline is now cost discipline"
-                subtitle="The habits that already make Copilot smarter also make it cheaper."
+                eyebrow={t.impact.eyebrow}
+                title={t.impact.title}
+                subtitle={t.impact.subtitle}
               />
 
               <div className="grid grid-cols-3 gap-4">
-                {pricingImpact.map((item, index) => (
+                {t.impact.items.map((item, index) => (
                   <FeatureCard key={item.title} dataId={`impact-${index}`} {...item} />
                 ))}
               </div>
 
               <Fragment animation="fade-up" asChild>
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <AccentPill label="Narrow context" color="#60a5fa" />
-                  <AccentPill label="Structured prompts" color="#c084fc" />
-                  <AccentPill label="Pick the right model" color="#fb7185" />
+                  {t.impact.pills.map((pill) => (
+                    <AccentPill key={pill.label} label={pill.label} color={pill.color} />
+                  ))}
                 </div>
               </Fragment>
             </div>
@@ -655,13 +472,13 @@ function App() {
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Agenda"
-                title="Four habits for the new pricing model"
-                subtitle="Move from blind chat to a cost-aware workflow with clear signals at every step."
+                eyebrow={t.agenda.eyebrow}
+                title={t.agenda.title}
+                subtitle={t.agenda.subtitle}
               />
 
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-                {agendaTracks.map((item, index) => (
+                {t.agenda.items.map((item, index) => (
                   <Fragment key={item.title} animation="fade-up" asChild>
                     <div>
                       <FeatureCard
@@ -683,14 +500,14 @@ function App() {
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 1 — Visibility"
-                title="Read the agent logs every day"
-                subtitle="Before tuning the engine, look at the meter. The agent already tells you what it cost and what it did."
+                eyebrow={t.visibility.eyebrow}
+                title={t.visibility.title}
+                subtitle={t.visibility.subtitle}
               />
 
               <div className="grid grid-cols-[1fr_1.05fr] items-start gap-4">
                 <div className="grid grid-cols-2 gap-4">
-                  {visibilityChecks.map((item, index) => (
+                  {t.visibility.items.map((item, index) => (
                     <FeatureCard
                       key={item.title}
                       compact
@@ -701,15 +518,11 @@ function App() {
                 </div>
 
                 <CommandPanel
-                  label="Where to look"
+                  label={t.visibility.cmd.label}
                   accent="#60a5fa"
-                  title="Agent logs surface tokens, model, tools, and files in every run."
-                  command='copilot logs --last 1 --show tokens,tools,files'
-                  notes={[
-                    'In the CLI: open chronicle to see token totals and tool calls for the last session.',
-                    'In the IDE: check the agent panel — model name, token count, and steps per turn.',
-                    'On the org side: usage dashboards aggregate per-user token spend across surfaces.',
-                  ]}
+                  title={t.visibility.cmd.title}
+                  command={t.visibility.cmd.command}
+                  notes={t.visibility.cmd.notes}
                 />
               </div>
             </div>
@@ -723,13 +536,13 @@ function App() {
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 2 — Context"
-                title="Less context is usually better context"
-                subtitle="Treat the context window as a budget, not a backpack. Open the few things the agent actually needs."
+                eyebrow={t.context.eyebrow}
+                title={t.context.title}
+                subtitle={t.context.subtitle}
               />
 
               <div className="grid grid-cols-2 gap-4">
-                {contextPrinciples.map((item, index) => (
+                {t.context.items.map((item, index) => (
                   <FeatureCard
                     key={item.title}
                     compact
@@ -751,9 +564,9 @@ function App() {
           <SlideShell className="min-h-[34rem]">
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 3 — Prompt strategy"
-                title="Goal + Context + Constraints + Done when"
-                subtitle="A small structure turns vague asks into executable prompts — and shrinks the tokens spent on guessing."
+                eyebrow={t.promptFrame.eyebrow}
+                title={t.promptFrame.title}
+                subtitle={t.promptFrame.subtitle}
               />
 
               <div className="relative mt-6 flex min-h-[19rem] items-center justify-center overflow-hidden rounded-[1.9rem] border border-white/10 bg-slate-950/55 p-6">
@@ -769,21 +582,20 @@ function App() {
                   className="sheen-panel relative z-10 max-w-xl rounded-[1.75rem] border border-white/10 bg-slate-950/80 px-8 py-6 text-center shadow-2xl"
                 >
                   <div className="relative z-10">
-                    <AccentPill label="Prompt frame" color="#93c5fd" className="tracking-[0.16em]" />
+                    <AccentPill label={t.promptFrame.pillLabel} color="#93c5fd" className="tracking-[0.16em]" />
                     <h3 className="mt-4 !text-[1.85rem] !font-semibold !leading-[1.08] text-white">
-                      Treat the agent like a junior engineer
+                      {t.promptFrame.centerTitle}
                     </h3>
                     <p className="mt-3 !text-[1rem] !leading-[1.5] text-slate-200">
-                      Tell it the goal, the relevant context, the rules it must follow, and how you
-                      will know it is done.
+                      {t.promptFrame.centerBody}
                     </p>
                   </div>
                 </div>
 
-                {promptFrame.map((item) => (
+                {t.promptFrame.pills.map((item, index) => (
                   <div key={item.label} className={cn('absolute z-10', item.positionClass)}>
                     <AccentPill
-                      dataId={`prompt-pill-${item.label.toLowerCase()}`}
+                      dataId={`prompt-pill-${index}`}
                       label={item.label}
                       color={item.color}
                       className="tracking-[0.16em]"
@@ -804,9 +616,9 @@ function App() {
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 3 — Prompt strategy"
-                title="Give the agent a PRD, not a wish"
-                subtitle="Success criteria up front means fewer wasted turns and a clearer review."
+                eyebrow={t.prd.eyebrow}
+                title={t.prd.title}
+                subtitle={t.prd.subtitle}
               />
 
               <div className="grid grid-cols-[0.9fr_1.1fr] items-start gap-4">
@@ -816,16 +628,16 @@ function App() {
                 >
                   <div className="relative z-10">
                     <AccentPill
-                      label="Prompt checklist"
+                      label={t.prd.pillLabel}
                       color="#93c5fd"
                       className="tracking-[0.16em]"
                     />
 
                     <div className="mt-5 flex flex-wrap gap-3">
-                      {promptFrame.map((item) => (
+                      {t.promptFrame.pills.map((item, index) => (
                         <AccentPill
                           key={item.label}
-                          dataId={`prompt-pill-${item.label.toLowerCase()}`}
+                          dataId={`prompt-pill-${index}`}
                           label={item.label}
                           color={item.color}
                           className="tracking-[0.14em]"
@@ -834,14 +646,12 @@ function App() {
                     </div>
 
                     <p className="mt-5 !text-[1rem] !leading-[1.55] text-slate-200">
-                      Name the scope, the non-goals, and the acceptance signal. If the answer could
-                      change architecture, state the guardrails before the ask.
+                      {t.prd.body}
                     </p>
 
                     <div className="mt-5 rounded-[1.25rem] border border-white/8 bg-black/20 px-4 py-4">
                       <p className="!text-[0.92rem] !leading-[1.55] text-slate-300">
-                        A 30-second PRD beats a five-minute back-and-forth — and burns far fewer
-                        tokens along the way.
+                        {t.prd.footer}
                       </p>
                     </div>
                   </div>
@@ -849,23 +659,7 @@ function App() {
 
                 <div className="rounded-3xl border border-white/10 bg-slate-950/75 p-4 shadow-2xl">
                   <Code language="markdown" lineNumbers style={{ fontSize: '0.8rem' }}>
-                    {`Goal:
-Add a feature flag around the new checkout retry logic.
-
-Context:
-- src/checkout/retry.ts holds the new behavior.
-- Flag service: src/flags/client.ts (returns boolean).
-- Stack: React + Vite + TypeScript.
-
-Constraints:
-- Keep public exports unchanged.
-- Default the flag to OFF in production.
-- No new dependencies.
-
-Done when:
-- New unit test covers flag ON and OFF.
-- 'npm run build' and 'npm test' are green.
-- Diff is under ~80 lines.`}
+                    {t.prd.code}
                   </Code>
                 </div>
               </div>
@@ -880,49 +674,24 @@ Done when:
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 4 — CLI"
-                title="GitHub Copilot CLI"
-                subtitle="An agentic terminal that searches, edits, runs, and explains — all in one thread, with token logs you can actually read."
+                eyebrow={t.cliIntro.eyebrow}
+                title={t.cliIntro.title}
+                subtitle={t.cliIntro.subtitle}
               />
 
               <div className="grid grid-cols-[1.05fr_0.95fr] items-start gap-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <FeatureCard
-                    compact
-                    title="Stays in the terminal"
-                    description="No tab-flipping. Search, patch, run tests, and explain — without leaving the shell."
-                    color="#60a5fa"
-                  />
-                  <FeatureCard
-                    compact
-                    title="Reads its own logs"
-                    description="Chronicle shows you tokens, tools, and steps for every session you run."
-                    color="#22d3ee"
-                  />
-                  <FeatureCard
-                    compact
-                    title="Composes with git"
-                    description="Lines up cleanly with branches, PRs, and CI — the agent works where your workflow lives."
-                    color="#a78bfa"
-                  />
-                  <FeatureCard
-                    compact
-                    title="Token-aware"
-                    description="Sessions are scoped, so context does not silently balloon across unrelated tasks."
-                    color="#34d399"
-                  />
+                  {t.cliIntro.cards.map((card) => (
+                    <FeatureCard key={card.title} compact {...card} />
+                  ))}
                 </div>
 
                 <CommandPanel
-                  label="One ask, many useful moves"
+                  label={t.cliIntro.cmd.label}
                   accent="#38bdf8"
-                  title="Let the CLI do investigation, patching, and validation in the same flow."
-                  command={'copilot "fix the failing checkout workflow and explain the root cause"'}
-                  notes={[
-                    'Start with the failing run, touched files, and constraints to keep the search small.',
-                    'Land the fix and run checks from the same thread — no context handoff between tools.',
-                    'Watch chronicle to see how many tokens each step actually cost.',
-                  ]}
+                  title={t.cliIntro.cmd.title}
+                  command={t.cliIntro.cmd.command}
+                  notes={t.cliIntro.cmd.notes}
                 />
               </div>
             </div>
@@ -934,26 +703,22 @@ Done when:
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 4 — CLI features (1/2)"
-                title="Discover before you change"
-                subtitle="Fleet, Research, and Chronicle build the context — and the visibility — before any code moves."
+                eyebrow={t.cliDiscovery.eyebrow}
+                title={t.cliDiscovery.title}
+                subtitle={t.cliDiscovery.subtitle}
               />
 
               <div className="grid grid-cols-[0.95fr_1.05fr] items-start gap-4">
                 <CommandPanel
-                  label="Investigate first"
+                  label={t.cliDiscovery.cmd.label}
                   accent="#22d3ee"
-                  title="Pull evidence into the working thread before you touch code."
-                  command={'copilot research "why is the nightly job timing out?" --use logs,issues,diff'}
-                  notes={[
-                    'Fleet keeps multiple investigations alive without dropping the main thread.',
-                    'Research stitches code, issues, and web evidence into one working view.',
-                    'Chronicle lets you resume from a known good checkpoint — and audit token cost.',
-                  ]}
+                  title={t.cliDiscovery.cmd.title}
+                  command={t.cliDiscovery.cmd.command}
+                  notes={t.cliDiscovery.cmd.notes}
                 />
 
                 <div className="grid grid-cols-1 gap-4">
-                  {cliDiscovery.map((capability, index) => (
+                  {t.cliDiscovery.items.map((capability, index) => (
                     <FeatureCard
                       key={capability.title}
                       compact
@@ -972,14 +737,14 @@ Done when:
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 4 — CLI features (2/2)"
-                title="Land the change without losing flow"
-                subtitle="Remote, Squad Mode, and PR Fix close the loop from patch to passing CI in one thread."
+                eyebrow={t.cliExecution.eyebrow}
+                title={t.cliExecution.title}
+                subtitle={t.cliExecution.subtitle}
               />
 
               <div className="grid grid-cols-[1.05fr_0.95fr] items-start gap-4">
                 <div className="grid grid-cols-1 gap-4">
-                  {cliExecution.map((capability, index) => (
+                  {t.cliExecution.items.map((capability, index) => (
                     <FeatureCard
                       key={capability.title}
                       compact
@@ -990,15 +755,11 @@ Done when:
                 </div>
 
                 <CommandPanel
-                  label="Patch and validate"
+                  label={t.cliExecution.cmd.label}
                   accent="#34d399"
-                  title="Same thread: patch, run, explain, and push the PR fix."
-                  command={'copilot pr fix --run "npm test" --explain --push'}
-                  notes={[
-                    'Remote runs in cloud or sandboxed envs when the local repo is not enough.',
-                    'Squad Mode splits work across focused agents — merge only the useful outcomes.',
-                    'PR Fix triages failing checks, patches, and pushes — with a written rationale.',
-                  ]}
+                  title={t.cliExecution.cmd.title}
+                  command={t.cliExecution.cmd.command}
+                  notes={t.cliExecution.cmd.notes}
                 />
               </div>
             </div>
@@ -1015,13 +776,13 @@ Done when:
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Track 4 — Skills"
-                title="Skills extend what Copilot can do"
-                subtitle="A skill is a reusable playbook — prompts, tools, and steps the agent should follow for a recurring task."
+                eyebrow={t.skills.eyebrow}
+                title={t.skills.title}
+                subtitle={t.skills.subtitle}
               />
 
               <div className="grid grid-cols-3 gap-4">
-                {skillsValue.map((item, index) => (
+                {t.skills.items.map((item, index) => (
                   <FeatureCard key={item.title} dataId={`skill-${index}`} {...item} />
                 ))}
               </div>
@@ -1029,9 +790,8 @@ Done when:
               <Fragment animation="fade-up" asChild>
                 <div className="mt-6 rounded-[1.5rem] border border-white/10 bg-slate-950/65 p-4">
                   <p className="!text-[0.98rem] !leading-[1.55] text-slate-200">
-                    <span className="font-semibold text-white">Use skills</span> for the boring,
-                    repeated stuff: code review checklists, on-call runbooks, migration steps, PR
-                    templates. The agent stops re-learning and you stop re-typing.
+                    <span className="font-semibold text-white">{t.skills.footerLead}</span>
+                    {t.skills.footerBody}
                   </p>
                 </div>
               </Fragment>
@@ -1050,14 +810,14 @@ Done when:
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Important — Security"
-                title="Be extremely careful installing skills"
-                subtitle="A skill runs with your local permissions. Treat every install like running a script from a stranger — because that is exactly what it is."
+                eyebrow={t.skillsRisks.eyebrow}
+                title={t.skillsRisks.title}
+                subtitle={t.skillsRisks.subtitle}
               />
 
               <div className="grid grid-cols-[1.05fr_0.95fr] items-start gap-4">
                 <div className="grid grid-cols-1 gap-4">
-                  {skillsRisks.map((item, index) => (
+                  {t.skillsRisks.items.map((item, index) => (
                     <FeatureCard
                       key={item.title}
                       compact
@@ -1075,19 +835,13 @@ Done when:
                       'radial-gradient(circle at 88% 0%, rgba(251,113,133,0.18) 0%, transparent 32%), linear-gradient(180deg, rgba(40,7,11,0.85), rgba(20,4,6,0.92))',
                   }}
                 >
-                  <AccentPill label="Vetting checklist" color="#fb7185" className="tracking-[0.22em]" />
+                  <AccentPill label={t.skillsRisks.checklistLabel} color="#fb7185" className="tracking-[0.22em]" />
                   <h3 className="mt-3 !text-[1.3rem] !font-semibold !leading-[1.15] text-white">
-                    Before any skill runs in your repo
+                    {t.skillsRisks.checklistTitle}
                   </h3>
 
                   <div className="mt-4 space-y-2.5">
-                    {[
-                      'Trust the source: official org, known maintainer, real activity.',
-                      'Read the manifest — every tool, command, and network call it declares.',
-                      'Pin a version. Never auto-update skills from the internet.',
-                      'Run new skills inside a sandbox or throwaway workspace first.',
-                      'Treat it like a dependency: review, log, and remove if unused.',
-                    ].map((item) => (
+                    {t.skillsRisks.checklist.map((item) => (
                       <div
                         key={item}
                         className="rounded-2xl border border-rose-300/15 bg-rose-500/5 px-4 py-2.5 text-[0.94rem] text-rose-50"
@@ -1110,9 +864,9 @@ Done when:
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Resources"
-                title="Where to look next"
-                subtitle="A curated starting point — plus a reminder that skills are powerful and deserve scrutiny."
+                eyebrow={t.resources.eyebrow}
+                title={t.resources.title}
+                subtitle={t.resources.subtitle}
               />
 
               <div className="grid grid-cols-2 gap-4">
@@ -1123,15 +877,15 @@ Done when:
                       'radial-gradient(circle at 88% 0%, rgba(96,165,250,0.18) 0%, transparent 32%), linear-gradient(180deg, rgba(15,23,42,0.9), rgba(2,6,23,0.92))',
                   }}
                 >
-                  <AccentPill label="Awesome Copilot" color="#60a5fa" className="tracking-[0.22em]" />
+                  <AccentPill label={t.resources.awesome.label} color="#60a5fa" className="tracking-[0.22em]" />
                   <h3 className="mt-3 !text-[1.3rem] !font-semibold !leading-[1.15] text-white">
-                    Patterns, prompts, and tools from the community
+                    {t.resources.awesome.title}
                   </h3>
                   <p className="mt-3 !text-[0.98rem] !leading-[1.55] text-slate-200">
-                    A curated index of Copilot tips, prompts, configs, and extensions worth borrowing.
+                    {t.resources.awesome.description}
                   </p>
                   <div className="mt-4 rounded-[1.25rem] border border-white/10 bg-slate-950/80 px-4 py-3 font-mono text-[0.95rem] text-blue-200">
-                    awesome-copilot.github.com
+                    {t.resources.awesome.domain}
                   </div>
                 </div>
 
@@ -1143,20 +897,21 @@ Done when:
                       'radial-gradient(circle at 88% 0%, rgba(251,113,133,0.18) 0%, transparent 32%), linear-gradient(180deg, rgba(40,7,11,0.78), rgba(20,4,6,0.9))',
                   }}
                 >
-                  <AccentPill label="skills.sh" color="#fb7185" className="tracking-[0.22em]" />
+                  <AccentPill label={t.resources.skillsRegistry.label} color="#fb7185" className="tracking-[0.22em]" />
                   <h3 className="mt-3 !text-[1.3rem] !font-semibold !leading-[1.15] text-white">
-                    A registry of community skills — handle with care
+                    {t.resources.skillsRegistry.title}
                   </h3>
                   <p className="mt-3 !text-[0.98rem] !leading-[1.55] text-rose-50/90">
-                    Useful for discovery, but anyone can publish. Vet every skill before you let it
-                    run in your repo or terminal.
+                    {t.resources.skillsRegistry.description}
                   </p>
                   <div className="mt-4 rounded-[1.25rem] border border-rose-300/30 bg-slate-950/80 px-4 py-3 font-mono text-[0.95rem] text-rose-200">
-                    skills.sh
+                    {t.resources.skillsRegistry.domain}
                   </div>
-                  <p className="mt-3 !text-[0.86rem] !leading-[1.5] text-rose-200/80">
-                    Read the manifest. Pin the version. Sandbox the first run.
-                  </p>
+                  {t.resources.skillsRegistry.note ? (
+                    <p className="mt-3 !text-[0.86rem] !leading-[1.5] text-rose-200/80">
+                      {t.resources.skillsRegistry.note}
+                    </p>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -1174,13 +929,13 @@ Done when:
 
             <div className="relative z-10">
               <SectionHeading
-                eyebrow="Closing"
-                title="What to remember tomorrow"
-                subtitle="Token-based pricing rewards the habits good engineers already wanted to build."
+                eyebrow={t.closing.eyebrow}
+                title={t.closing.title}
+                subtitle={t.closing.subtitle}
               />
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                {keyTakeaways.map((item) => (
+                {t.closing.items.map((item) => (
                   <FeatureCard key={item.title} {...item} />
                 ))}
               </div>
@@ -1195,11 +950,11 @@ Done when:
                     />
                     <div className="relative rounded-full border border-white/10 bg-slate-950/40 px-6 py-3">
                       <p className="!text-[1.3rem] !font-semibold !leading-[1.2] text-white">
-                        Narrow context. Sharper prompts. Vetted tools.
+                        {t.closing.callout}
                       </p>
                     </div>
                   </div>
-                  <p className="!text-[2.2rem] !font-black tracking-tight text-white">Thank you.</p>
+                  <p className="!text-[2.2rem] !font-black tracking-tight text-white">{t.closing.thanks}</p>
                 </div>
               </Fragment>
             </div>
@@ -1207,6 +962,14 @@ Done when:
         </Slide>
       </Deck>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <Presentation />
+    </LanguageProvider>
   );
 }
 
