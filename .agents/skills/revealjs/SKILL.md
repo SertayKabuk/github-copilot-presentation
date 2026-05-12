@@ -5,9 +5,9 @@ description: revealjs developer-facing guidance, including setup, authoring, sty
 
 # reveal.js Developer Guide
 
-> Synthesized from the Markdown files in `reveal/revealjs.com`, primarily the English docs under `src/`, and intended as a practical development reference.
+> Synthesized from the Markdown files in `reveal/revealjs.com`, primarily the English docs under `src/`, plus the working HTML demos in `examples/`, and intended as a practical development reference.
 
-This guide consolidates the main developer-facing guidance from the official docs, including setup, authoring, styling, plugins, runtime APIs, presenter tools, navigation patterns, upgrade paths, and React integration. It includes the pages that are easy to miss when skimming the repo, such as `transitions.md`, `keyboard.md`, `overview.md`, `presentation-state.md`, `touch-navigation.md`, `links.md`, `fullscreen.md`, `jump-to-slide.md`, and `upgrading.md`. The `src/zh-Hant/` pages mirror the same docs in translation, so this reference focuses on the English originals.
+This guide consolidates the main developer-facing guidance from the official docs, including setup, authoring, styling, plugins, runtime APIs, presenter tools, navigation patterns, upgrade paths, React integration, and the concrete patterns shown by the upstream `examples/*.html` gallery. It includes the pages that are easy to miss when skimming the repo, such as `transitions.md`, `keyboard.md`, `overview.md`, `presentation-state.md`, `touch-navigation.md`, `links.md`, `fullscreen.md`, `jump-to-slide.md`, and `upgrading.md`. The `src/zh-Hant/` pages mirror the same docs in translation, so this reference focuses on the English originals.
 
 ## Source coverage
 
@@ -19,6 +19,7 @@ Repository markdown inventory reviewed for this guide:
 - Runtime and control: `config.md`, `keyboard.md`, `api.md`, `events.md`, `postmessage.md`, `presentation-state.md`, `overview.md`, `fullscreen.md`, `touch-navigation.md`, `jump-to-slide.md`, `slide-numbers.md`
 - Ecosystem and delivery: `themes.md`, `plugins.md`, `creating-plugins.md`, `speaker-view.md`, `pdf-export.md`, `react.md`, `react-legacy.md`, `scroll-view.md`, `lightbox.md`, `multiplex.md`, `upgrading.md`
 - Site and translation pages: `src/index.md`, `src/course.md`, and `src/zh-Hant/*.md` were checked for coverage context; the guide synthesizes the English docs to avoid duplicating translated content
+- Example gallery: all upstream HTML files currently in `examples/`: `500-slides.html`, `auto-animate.html`, `backgrounds.html`, `barebones.html`, `layout-helpers.html`, `lightbox.html`, `markdown.html`, `math.html`, `media.html`, `multiple-presentations.html`, `scroll.html`, and `transitions.html`
 
 ## Documentation map
 
@@ -29,7 +30,40 @@ Repository markdown inventory reviewed for this guide:
 | Structure and animation | Layout, backgrounds, transitions, fragments, auto-animate, slide visibility |
 | Configuration and runtime | Config options, keyboard control, touch, presentation state, auto-slide, JavaScript API, events, postMessage |
 | Presenter workflow | Overview mode, fullscreen, jump-to-slide, slide numbers, speaker view, PDF export |
+| Examples gallery | Barebones setup, large decks, multi-deck embeds, lightboxes, scroll mode, and known-good feature snippets |
 | Modern integrations | Scroll view, lightbox, React bindings, multiplex, upgrading |
+
+## Examples directory walkthrough
+
+The upstream `examples/` folder is executable documentation. These HTML files are the fastest way to copy a known-good pattern:
+
+| File | What it demonstrates | Reach for it when you need |
+| --- | --- | --- |
+| `500-slides.html` | A stress-test deck with hundreds of simple horizontal slides | sanity-checking performance or generated decks |
+| `auto-animate.html` | `data-id`-driven morphs, unmatched fade-outs, grouped animations, code diffs, list reordering | complex state-to-state motion |
+| `backgrounds.html` | color, image, repeated, video, iframe, and inherited stack backgrounds | slide backgrounds beyond a single hero image |
+| `barebones.html` | the smallest possible reveal.js deck with no theme | debugging setup or building a deck from scratch |
+| `layout-helpers.html` | `r-fit-text`, `r-stretch`, `r-stack`, `r-hstack`, `r-vstack`, and alignment utilities | fast slide layout composition |
+| `lightbox.html` | preview overlays and lightbox flows for images, video, and iframe links | opt-in previews without leaving the deck |
+| `markdown.html` | external Markdown, regex separators, attributes, code fences, images, math, smartypants | advanced Markdown authoring |
+| `math.html` | MathJax/KaTeX usage, macros, fragments, and display modes | equation-heavy decks or migrations |
+| `media.html` | autoplaying iframes, video, audio, background media, and interactive iframe backgrounds | embedded media behavior |
+| `multiple-presentations.html` | two independent embedded decks with different plugin sets and focus handling | multi-deck dashboards or docs pages |
+| `scroll.html` | `view: 'scroll'` plus fragments, auto-animate, code highlights, gradients, and background media | article-style or mobile-friendly decks |
+| `transitions.html` | per-slide transition overrides, mixed in/out transitions, and vertical transition variations | tuning slide motion |
+
+### What the HTML demos add beyond the prose docs
+
+- `500-slides.html` confirms that a huge deck can stay fast when the markup is intentionally simple and the transition is low-overhead.
+- `auto-animate.html` proves auto-animate is not limited to text morphs: it covers code diffs, list reorders, text metric interpolation, absolute-position morphs, grouped sequences with `data-auto-animate-id`, and deep-linked vertical stacks.
+- `backgrounds.html` shows shorthand `data-background`, stack-level inheritance, background reuse across consecutive slides, and the auto-applied `has-dark-background` / `has-light-background` classes.
+- `layout-helpers.html` shows the helpers in realistic combinations: `r-stack` plus fragments, `r-fit-text` on multiple headings, `r-stretch` with fixed caption content, and `r-hstack` / `r-vstack` inside auto-animated slides.
+- `markdown.html` demonstrates all three authoring styles in one place: external files, inline `<script type="text/template">`, and raw Markdown directly inside `<section data-markdown>`.
+- `math.html` goes beyond toy equations by showing fragments, legacy math script tags, and a practical `mathjax4` configuration with macros and line wrapping.
+- `media.html` and `lightbox.html` show autoplay iframes, interactive iframe backgrounds, fragment-scoped audio, explicit preview URLs, and opt-in link previews.
+- `multiple-presentations.html` shows two embedded decks with separate plugin sets, focus-scoped keyboard control, and imperative navigation after async initialization.
+- `scroll.html` proves scroll view still supports fragments, auto-animate, code walkthroughs, gradients, image backgrounds, and muted background video, while also showing custom easing and staggered `data-auto-animate-delay`.
+- `transitions.html` shows mixed in/out transitions, per-slide overrides inside vertical stacks, and when `data-transition="none"` is useful.
 
 ## Recommended default path
 
@@ -58,6 +92,29 @@ const deck = new Reveal({
 
 await deck.initialize()
 ```
+
+### Barebones HTML example
+
+`examples/barebones.html` is the smallest working reveal.js deck:
+
+```html
+<link rel="stylesheet" href="../dist/reveal.css" />
+
+<div class="reveal">
+  <div class="slides">
+    <section>Slide 1</section>
+    <section>Slide 2</section>
+  </div>
+</div>
+
+<script src="../dist/reveal.js"></script>
+<script>
+  Reveal.initialize()
+</script>
+```
+
+- No theme is loaded, so you see browser defaults.
+- It is the best baseline when debugging markup, CSS, or plugin loading issues.
 
 ## Core deck structure
 
@@ -94,6 +151,31 @@ If you place multiple decks on one page, use:
 
 Without that, decks tend to size to the full viewport and compete for keyboard control.
 
+The official multi-deck example (`examples/multiple-presentations.html`) uses one `Reveal` instance per root element:
+
+```js
+const deck1 = new Reveal(document.querySelector('.deck1'), {
+  embedded: true,
+  progress: false,
+  keyboardCondition: 'focused',
+  plugins: [RevealHighlight],
+})
+
+const deck2 = new Reveal(document.querySelector('.deck2'), {
+  embedded: true,
+  progress: false,
+  keyboardCondition: 'focused',
+  plugins: [RevealMarkdown, RevealMath],
+})
+
+await deck1.initialize()
+await deck2.initialize()
+```
+
+- Each deck can register its own plugins and event handlers.
+- The active deck root receives a `focused` class, which the example uses for focus styling.
+- Promise-based initialization is handy when you want to move a secondary deck immediately after startup.
+
 ## Configuration that matters most
 
 | Option | Why it matters |
@@ -121,6 +203,14 @@ Reveal.configure({
 })
 ```
 
+### Large deck stress example
+
+`examples/500-slides.html` is the upstream proof that reveal.js can handle very large horizontal decks when the slides stay simple.
+
+- It keeps the deck intentionally bare: one theme, no plugins, and repeated `<section><h1>...</h1></section>` slides.
+- It uses `transition: 'linear'`, which is a good low-overhead starting point for generated or high-count decks.
+- If a generated deck performs poorly, compare it against this example before blaming reveal.js itself.
+
 ### Auto-slide and pacing
 
 Auto-slide is useful for kiosks, unattended loops, and timed demos.
@@ -143,6 +233,8 @@ Slide transitions and background transitions are configured separately.
 - `data-transition-speed="default|fast|slow"` lets a slide override transition speed.
 - You can combine in/out behavior with values like `slide-in fade-out` or `fade-in slide-out`.
 - `backgroundTransition` changes background motion globally, and `data-background-transition` overrides it per slide.
+- `examples/transitions.html` is the quickest sanity check for mixed pairs such as `zoom-in fade-out` and `convex-in concave-out`, including inside vertical stacks.
+- The same example also includes `data-transition="none"`, which is useful for static comparison slides and performance-sensitive generated decks.
 
 ### Keyboard bindings
 
@@ -205,6 +297,15 @@ The Markdown plugin is more capable than a simple Markdown-to-HTML converter. It
 - Indentation matters. Mixed tabs/spaces and extra blank lines can produce surprising results.
 - External notes and external Markdown are especially sensitive to local file restrictions.
 
+### Example-driven Markdown patterns
+
+- `examples/markdown.html` uses all three authoring modes: external `data-markdown`, inline `<script type="text/template">`, and raw Markdown directly in the section body.
+- `examples/markdown.html` shows custom external separators using blank-line regexes, not just the default `---`.
+- Setting `data-separator="$x"` is a deliberate no-match that lets literal `---` remain Markdown horizontal rules.
+- The code fence syntax can combine starting line offsets with stepped highlights when you are quoting real source files.
+- The example also confirms that slide attributes, element attributes, images, math, and `smartypants` work inside Markdown-authored slides.
+- The official example initializes Markdown alongside Highlight, Notes, and KaTeX, so those plugins can coexist in one deck without special handling.
+
 ## Presenting code
 
 Syntax highlighting is powered by the highlight plugin plus a CSS theme such as Monokai.
@@ -228,6 +329,7 @@ const deck = new Reveal({
 - `data-line-numbers="3,8-10"` highlights fixed lines.
 - `data-line-numbers="3-5|8-10|13-15"` creates step-through code walkthroughs.
 - `data-ln-start-from="7"` offsets visible line numbers.
+- In Markdown code fences, you can combine a starting line offset with stepped highlights when quoting source snippets from real files.
 
 ### Example
 
@@ -250,6 +352,8 @@ The Math plugin covers both HTML-authored and Markdown-authored decks.
 - Library-specific config lives under `katex`, `mathjax2`, `mathjax3`, or `mathjax4`.
 - KaTeX and MathJax default to CDN-backed assets unless you pin versions or point to a local copy.
 - Offline decks should use `katex.local` or a local `mathjax` path rather than relying on the default CDN URLs.
+- `examples/math.html` shows a full `mathjax4` setup with `tex.macros`, `displayOverflow: 'linebreak'`, and `skipHtmlTags`, which is a strong template for real-world math-heavy decks.
+- The example also demonstrates math inside fragments and legacy `<script type="math/tex; mode=display">` blocks, both of which are useful when migrating older content.
 
 ## Fragments and auto-animate
 
@@ -264,6 +368,7 @@ Fragments let you reveal slide content progressively.
   - `fade-down`
   - `fade-left`
   - `fade-right`
+  - `fade-in-then-out`
   - `fade-out`
   - `current-visible`
   - `grow`
@@ -276,14 +381,40 @@ Custom fragment effects are also supported by styling `.fragment.custom-name` an
 ### Auto-animate
 
 Auto-animate matches elements across adjacent slides and animates the transition.
+The dedicated `examples/auto-animate.html` deck is worth reading alongside the docs because it covers several edge cases in one place.
 
 - Add `data-auto-animate` to adjacent slides.
 - Use `data-id` when you want reliable matching.
-- Per-element tuning is available through:
+- Per-sequence and per-element tuning is available through:
   - `data-auto-animate-delay`
   - `data-auto-animate-duration`
   - `data-auto-animate-easing`
+- `data-auto-animate-unmatched="fade"` softens enter/exit behavior for unmatched elements.
+- `data-auto-animate-id` scopes separate animation groups so nearby sequences do not cross-match.
 - For code blocks, matching `data-id` values on `<pre>` elements work especially well.
+- The official demos show CSS interpolation for position, size, colors, border radius, opacity, line-height, and letter-spacing.
+- `scroll.html` adds slide-level easing plus per-element delays for staggered auto-animations.
+- The example gallery uses the same primitives for code diffs, list reordering, style interpolation, absolute-position morphs, and deep-linked stacked slides inside vertical stacks.
+
+```html
+<section data-auto-animate data-auto-animate-unmatched="fade">
+  <h2 data-id="title">Example</h2>
+  <pre data-id="code"><code>const count = 0</code></pre>
+</section>
+
+<section data-auto-animate data-auto-animate-unmatched="fade">
+  <h2 data-id="title" style="margin-top: 3rem">Example</h2>
+  <pre data-id="code"><code>const count = 1</code></pre>
+</section>
+
+<section data-auto-animate data-auto-animate-id="chart-step">
+  <div data-id="bar-1" style="height: 40px"></div>
+</section>
+
+<section data-auto-animate data-auto-animate-id="chart-step">
+  <div data-id="bar-1" data-auto-animate-delay="0.1" style="height: 140px"></div>
+</section>
+```
 
 ### Auto-animate caveat
 
@@ -310,6 +441,8 @@ The docs cover built-in themes such as:
 
 Theme values are exposed as CSS custom properties, which makes custom theming straightforward.
 
+`examples/barebones.html` intentionally omits a theme so you can see exactly what reveal.js itself provides without presentation styling.
+
 ### Backgrounds
 
 Per-slide background options include:
@@ -325,7 +458,25 @@ Per-slide background options include:
 - `data-background-size`, `data-background-position`, and `data-background-repeat`
 - `data-background-transition`
 
+`examples/backgrounds.html` also shows two details that are easy to miss:
+
+- `data-background` works as a shorthand for both colors and images, while `data-background-color` is the more explicit variant.
+- If you put a background on a parent slide in a vertical stack, child slides inherit it until they override it.
+- reveal.js adds `has-dark-background` and `has-light-background` classes, which the example uses to swap foreground text color automatically.
+- Repeating the same background across adjacent horizontal or vertical slides is a supported way to make multiple steps feel like one scene.
+
 Background behavior can also be customized globally with `backgroundTransition`. For larger motion-heavy decks, the docs also cover parallax backgrounds through `parallaxBackgroundImage`, `parallaxBackgroundSize`, `parallaxBackgroundHorizontal`, and `parallaxBackgroundVertical`.
+
+```html
+<section
+  data-background="assets/image2.png"
+  data-background-size="100px"
+  data-background-repeat="repeat"
+  data-background-color="#111"
+>
+  <h2>Tiled background image</h2>
+</section>
+```
 
 ### Layout helpers
 
@@ -334,20 +485,45 @@ Background behavior can also be customized globally with `backgroundTransition`.
 | `r-stack` | Layer items on top of each other |
 | `r-fit-text` | Auto-size text to fill available width |
 | `r-stretch` | Stretch one direct child to fill remaining height |
+| `r-hstack` | Lay items out horizontally with flexbox |
+| `r-vstack` | Lay items out vertically with flexbox |
 | `r-frame` | Add a framed treatment around an element |
+
+`examples/layout-helpers.html` shows these helpers in combination rather than isolation.
+The same helper stylesheet also exposes alignment utilities such as `items-start`, `items-center`, `justify-start`, `justify-center`, and `justify-between`, which the official examples combine with `r-hstack` and `r-vstack`.
 
 `r-stretch` has a strict limitation: it only works on one direct child of the slide.
 
+`examples/layout-helpers.html` also shows two strong combinations:
+
+- `r-stack` pairs naturally with `fragment fade-in-then-out` when you want one visual slot that changes over time.
+- `r-hstack` and `r-vstack` work well with `data-auto-animate` when you want cards, labels, or chips to reflow between steps.
+
 ### Media behavior
+
+The `examples/media.html` deck covers regular iframes, background iframes, video, background video, and audio in one place.
 
 - Use `data-src` for lazy-loaded media.
 - Use `data-autoplay` for per-element autoplay.
 - `autoPlayMedia` lets you force autoplay on, force it off, or defer to per-element settings.
 - Use `data-preload` when you want iframes preloaded before they become active.
 - Embedded iframes receive `slide:start` and `slide:stop` messages as the deck enters or leaves the slide.
+- Regular slide iframes can use `data-autoplay` too, not just audio and video elements.
+- `data-background-interactive` makes a background iframe interactive instead of decorative only.
+- `data-background-video-muted` is useful for silent motion backgrounds, including scroll-view decks.
+- Audio elements can live inside fragments and auto-play when those fragments are revealed.
 - Add `data-ignore` if you do not want reveal.js to pause or resume a media element automatically.
 - reveal.js automatically pauses media when the slide exits unless configured otherwise.
-- Lightbox preview features exist for images, video, and iframe links in newer docs through `data-preview-image`, `data-preview-video`, `data-preview-link`, and `data-preview-fit`.
+
+### Preview overlays and lightbox
+
+The `examples/lightbox.html` deck is the clearest reference for opt-in previews.
+
+- `data-preview-image`, `data-preview-video`, and `data-preview-link` can be attached to images, videos, or links.
+- `data-preview-fit="contain|cover"` controls how media is scaled inside the overlay.
+- `previewLinks: false` disables automatic iframe previews so only explicitly marked elements open overlays.
+- `data-preview-link="false"` turns previewing off for one link even when preview behavior is otherwise enabled.
+- Preview attributes can point at a different full-size asset than the visible thumbnail or link target, which is useful for low-res thumbs and high-res overlays.
 
 ## Scroll view
 
@@ -359,6 +535,10 @@ Scroll view is an alternate reading mode that turns the deck into a linear docum
 - `scrollSnap` can be `mandatory`, `proximity`, or `false`.
 - `scrollLayout` lets you choose between a full or compact layout.
 - `scrollActivationWidth` controls when scroll view activates automatically on smaller screens.
+- `examples/scroll.html` confirms that fragments, auto-animate, code line highlights, gradient backgrounds, image backgrounds, and muted background video all continue to work in scroll mode.
+- The scroll demo uses slide-level `data-auto-animate-easing` plus per-element `data-auto-animate-delay` to create staggered scroll-triggered motion.
+- It also uses `<script type="text/template">` inside a `<code>` block, which is a handy way to preserve JSX or HTML source without the browser parsing it as real markup.
+- Scroll view can therefore be an article-like presentation mode rather than a stripped-down fallback.
 
 ## Plugin system
 
