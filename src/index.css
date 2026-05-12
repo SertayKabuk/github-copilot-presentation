@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+}
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+  }
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #0f172a; /* Fallback */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/GitHub-Copilot-Workspace.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3; /* Transparency */
+  z-index: -1;
+  pointer-events: none;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Force reveal container to be transparent so the body background shows through */
+.reveal, 
+.reveal .slide-background, 
+.reveal .slide-background-content {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.reveal {
+  font-family: var(--font-sans);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal :is(h1, h2, h3, h4, h5, h6, p, li) {
+  text-shadow: none !important;
+  letter-spacing: normal !important;
+}
+
+.reveal :is(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+  text-transform: none !important;
+  text-align: left !important;
+}
+
+.reveal p {
+  margin: 0;
+}
+
+.reveal pre {
+  margin: 0;
+  width: 100%;
+  box-shadow: none;
+}
+
+.reveal pre code {
+  max-height: none;
+}
