@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Code, Deck, Fragment, Slide } from '@revealjs/react';
 import RevealHighlight from 'reveal.js/plugin/highlight';
+import RevealNotes from 'reveal.js/plugin/notes';
 import estimatedScreenshot from './assets/estimated.png';
 import { LanguageProvider, useLang, type Feature } from './i18n';
 
@@ -30,6 +31,10 @@ type AccentPillProps = {
 type SlideShellProps = {
   children: ReactNode;
   className?: string;
+};
+
+type SpeakerNotesProps = {
+  items: string[];
 };
 
 type ImageTemplateSlideProps = {
@@ -69,6 +74,18 @@ function cn(...values: Array<string | undefined | false>) {
 
 function SlideShell({ children, className }: SlideShellProps) {
   return <div className={cn('slide-shell mx-auto max-w-[82rem]', className)}>{children}</div>;
+}
+
+function SpeakerNotes({ items }: SpeakerNotesProps) {
+  return (
+    <aside className="notes">
+      <ul>
+        {items.map((item, index) => (
+          <li key={`${item}-${index}`}>{item}</li>
+        ))}
+      </ul>
+    </aside>
+  );
 }
 
 function FloatingOrb({ color, className, dataId }: FloatingOrbProps) {
@@ -366,10 +383,11 @@ function Presentation() {
           autoAnimateEasing: 'cubic-bezier(0.22, 1, 0.36, 1)',
           autoAnimateDuration: 0.65,
         }}
-        plugins={[RevealHighlight]}
+        plugins={[RevealHighlight, RevealNotes]}
       >
         {/* Slide 1 — Title */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 24%, rgba(59,130,246,0.20), transparent 28%), radial-gradient(circle at 82% 12%, rgba(192,132,252,0.16), transparent 26%), linear-gradient(135deg, rgba(15,23,42,0.02), rgba(2,6,23,0.2))">
+          <SpeakerNotes items={t.hero.cmd.notes} />
           <SlideShell className="min-h-[37rem] flex flex-col justify-center">
             <div className="hero-grid absolute inset-0 opacity-60" />
             <FloatingOrb color="rgba(96,165,250,0.40)" className="-left-12 top-10 h-48 w-48" />
@@ -429,14 +447,14 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 15 — Image template (duplicate this block and replace title / imageSrc) */}
+        {/* Slide 2 — Example snapshot */}
         <ImageTemplateSlide
           title={t.imageTemplate.title}
           imageSrc={estimatedScreenshot}
           imageAlt={t.imageTemplate.imageAlt}
         />
 
-        {/* Slide 2 — Pricing shift */}
+        {/* Slide 3 — Pricing shift */}
         <Slide data-background-gradient="radial-gradient(circle at 20% 18%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(251,113,133,0.14), transparent 26%)">
           <SlideShell>
             <FloatingOrb color="rgba(96,165,250,0.30)" className="left-2 top-3 h-36 w-36" />
@@ -468,7 +486,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 3 — What it means for you */}
+        {/* Slide 4 — What it means for you */}
         <Slide data-background-gradient="radial-gradient(circle at 16% 18%, rgba(192,132,252,0.16), transparent 28%), radial-gradient(circle at 84% 22%, rgba(96,165,250,0.10), transparent 24%)">
           <SlideShell>
             <FloatingOrb
@@ -500,7 +518,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 4 — Agenda */}
+        {/* Slide 5 — Agenda */}
         <Slide data-background-gradient="radial-gradient(circle at 50% 0%, rgba(34,211,238,0.10), transparent 36%), linear-gradient(180deg, rgba(15,23,42,0.02), rgba(2,6,23,0.18))">
           <SlideShell>
             <FloatingOrb color="rgba(34,211,238,0.26)" className="floating-orb--slow right-0 top-0 h-44 w-44" />
@@ -530,8 +548,9 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 5 — Personalized usage advice */}
+        {/* Slide 6 — Personalized usage advice */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 16%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 84% 16%, rgba(34,211,238,0.10), transparent 24%)">
+          <SpeakerNotes items={t.visibility.cmd.notes} />
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
@@ -564,7 +583,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 6 — Context management */}
+        {/* Slide 7 — Context management */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(52,211,153,0.10), transparent 24%)">
           <SlideShell>
             <FloatingOrb color="rgba(59,130,246,0.30)" className="left-4 top-4 h-36 w-36" />
@@ -590,7 +609,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 7 — Prompt frame */}
+        {/* Slide 8 — Prompt frame */}
         <Slide
           autoAnimate
           data-auto-animate-unmatched="fade"
@@ -642,7 +661,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 8 — PRD-style prompt */}
+        {/* Slide 9 — PRD-style prompt */}
         <Slide
           autoAnimate
           data-auto-animate-unmatched="fade"
@@ -702,8 +721,62 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 9 — CLI Intro */}
+        {/* Slide 10 — Sample PRD */}
+        <Slide
+          autoAnimate
+          data-auto-animate-unmatched="fade"
+          data-background-gradient="radial-gradient(circle at 18% 18%, rgba(34,211,238,0.14), transparent 28%), radial-gradient(circle at 82% 16%, rgba(96,165,250,0.12), transparent 24%)"
+        >
+          <SlideShell>
+            <div className="relative z-10">
+              <SectionHeading
+                eyebrow={t.prdSample.eyebrow}
+                title={t.prdSample.title}
+                subtitle={t.prdSample.subtitle}
+              />
+
+              <div className="grid grid-cols-[0.82fr_1.18fr] items-start gap-4">
+                <div className="sheen-panel rounded-[1.75rem] border border-white/10 bg-slate-950/72 p-5 shadow-2xl">
+                  <div className="relative z-10">
+                    <AccentPill
+                      label={t.prdSample.pillLabel}
+                      color="#22d3ee"
+                      className="tracking-[0.16em]"
+                    />
+
+                    <p className="mt-4 !text-[1rem] !leading-[1.55] text-slate-200">
+                      {t.prdSample.intro}
+                    </p>
+
+                    <div className="mt-5 space-y-2.5">
+                      {t.prdSample.checklist.map((item) => (
+                        <div
+                          key={item}
+                          className="rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-[0.95rem] text-slate-200"
+                        >
+                          <div className="flex items-start gap-3">
+                            <span className="mt-1.5 h-2.5 w-2.5 rounded-full bg-cyan-300" />
+                            <span>{item}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-white/10 bg-slate-950/75 p-4 shadow-2xl">
+                  <Code language="markdown" lineNumbers style={{ fontSize: '0.78rem' }}>
+                    {t.prdSample.code}
+                  </Code>
+                </div>
+              </div>
+            </div>
+          </SlideShell>
+        </Slide>
+
+        {/* Slide 11 — CLI command map */}
         <Slide data-background-gradient="radial-gradient(circle at 14% 18%, rgba(59,130,246,0.14), transparent 28%), radial-gradient(circle at 86% 12%, rgba(34,211,238,0.12), transparent 24%)">
+          <SpeakerNotes items={t.cliIntro.cmd.notes} />
           <SlideShell>
             <FloatingOrb color="rgba(59,130,246,0.32)" className="left-4 top-4 h-36 w-36" />
 
@@ -733,8 +806,44 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 10 — CLI: Discovery features */}
+        {/* Slide 12 — Chronicle */}
+        <Slide data-background-gradient="radial-gradient(circle at 18% 16%, rgba(34,211,238,0.14), transparent 28%), radial-gradient(circle at 84% 16%, rgba(168,85,247,0.12), transparent 24%)">
+          <SpeakerNotes items={t.chronicle.cmd.notes} />
+          <SlideShell>
+            <div className="relative z-10">
+              <SectionHeading
+                eyebrow={t.chronicle.eyebrow}
+                title={t.chronicle.title}
+                subtitle={t.chronicle.subtitle}
+              />
+
+              <div className="grid grid-cols-[1fr_1.05fr] items-start gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {t.chronicle.items.map((item, index) => (
+                    <FeatureCard
+                      key={item.title}
+                      compact
+                      dataId={`chronicle-${index}`}
+                      {...item}
+                    />
+                  ))}
+                </div>
+
+                <CommandPanel
+                  label={t.chronicle.cmd.label}
+                  accent="#22d3ee"
+                  title={t.chronicle.cmd.title}
+                  commands={t.chronicle.cmd.commands}
+                  notes={t.chronicle.cmd.notes}
+                />
+              </div>
+            </div>
+          </SlideShell>
+        </Slide>
+
+        {/* Slide 13 — CLI: Discovery features */}
         <Slide data-background-gradient="radial-gradient(circle at 20% 14%, rgba(59,130,246,0.14), transparent 28%), radial-gradient(circle at 85% 24%, rgba(34,211,238,0.10), transparent 24%)">
+          <SpeakerNotes items={t.cliDiscovery.cmd.notes} />
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
@@ -767,8 +876,44 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 11 — CLI: Execution features */}
+        {/* Slide 14 — CLI: MCP hygiene */}
+        <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(245,158,11,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(34,211,238,0.10), transparent 24%)">
+          <SpeakerNotes items={t.cliMcp.cmd.notes} />
+          <SlideShell>
+            <div className="relative z-10">
+              <SectionHeading
+                eyebrow={t.cliMcp.eyebrow}
+                title={t.cliMcp.title}
+                subtitle={t.cliMcp.subtitle}
+              />
+
+              <div className="grid grid-cols-[0.95fr_1.05fr] items-start gap-4">
+                <CommandPanel
+                  label={t.cliMcp.cmd.label}
+                  accent="#f59e0b"
+                  title={t.cliMcp.cmd.title}
+                  commands={t.cliMcp.cmd.commands}
+                  notes={t.cliMcp.cmd.notes}
+                />
+
+                <div className="grid grid-cols-1 gap-4">
+                  {t.cliMcp.items.map((capability, index) => (
+                    <FeatureCard
+                      key={capability.title}
+                      compact
+                      dataId={`cli-mcp-${index}`}
+                      {...capability}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SlideShell>
+        </Slide>
+
+        {/* Slide 15 — CLI: Execution features */}
         <Slide data-background-gradient="radial-gradient(circle at 80% 18%, rgba(52,211,153,0.14), transparent 28%), radial-gradient(circle at 18% 20%, rgba(245,158,11,0.12), transparent 24%)">
+          <SpeakerNotes items={t.cliExecution.cmd.notes} />
           <SlideShell>
             <div className="relative z-10">
               <SectionHeading
@@ -801,7 +946,42 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 12 — Skills overview */}
+        {/* Slide 16 — CLI: PR workflows */}
+        <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(96,165,250,0.14), transparent 28%), radial-gradient(circle at 82% 18%, rgba(168,85,247,0.12), transparent 24%)">
+          <SpeakerNotes items={t.cliPr.cmd.notes} />
+          <SlideShell>
+            <div className="relative z-10">
+              <SectionHeading
+                eyebrow={t.cliPr.eyebrow}
+                title={t.cliPr.title}
+                subtitle={t.cliPr.subtitle}
+              />
+
+              <div className="grid grid-cols-[0.95fr_1.05fr] items-start gap-4">
+                <CommandPanel
+                  label={t.cliPr.cmd.label}
+                  accent="#60a5fa"
+                  title={t.cliPr.cmd.title}
+                  commands={t.cliPr.cmd.commands}
+                  notes={t.cliPr.cmd.notes}
+                />
+
+                <div className="grid grid-cols-1 gap-4">
+                  {t.cliPr.items.map((capability, index) => (
+                    <FeatureCard
+                      key={capability.title}
+                      compact
+                      dataId={`cli-pr-${index}`}
+                      {...capability}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </SlideShell>
+        </Slide>
+
+        {/* Slide 17 — Skills overview */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(192,132,252,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(96,165,250,0.10), transparent 24%)">
           <SlideShell>
             <FloatingOrb
@@ -834,7 +1014,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 13 — Skills WARNING */}
+        {/* Slide 18 — Skills WARNING */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(251,113,133,0.20), transparent 28%), radial-gradient(circle at 82% 18%, rgba(245,158,11,0.16), transparent 24%), linear-gradient(180deg, rgba(40,7,11,0.25), rgba(20,4,6,0.4))">
           <SlideShell>
             <FloatingOrb color="rgba(251,113,133,0.32)" className="left-4 top-4 h-40 w-40" />
@@ -894,7 +1074,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 14 — Resources */}
+        {/* Slide 19 — Resources */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(52,211,153,0.12), transparent 24%)">
           <SlideShell>
             <div className="relative z-10">
@@ -953,7 +1133,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 16 — Closing */}
+        {/* Slide 20 — Closing */}
         <Slide data-background-gradient="radial-gradient(circle at 50% 85%, rgba(59,130,246,0.12), transparent 28%), radial-gradient(circle at 18% 20%, rgba(168,85,247,0.12), transparent 24%), radial-gradient(circle at 82% 18%, rgba(52,211,153,0.10), transparent 22%)">
           <SlideShell className="min-h-[34rem] flex flex-col justify-center">
             <FloatingOrb color="rgba(59,130,246,0.32)" className="left-6 top-8 h-44 w-44" />

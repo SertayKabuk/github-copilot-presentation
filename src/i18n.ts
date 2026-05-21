@@ -102,15 +102,33 @@ export type Translation = {
     footer: string;
     code: string;
   };
+  prdSample: Heading & {
+    pillLabel: string;
+    intro: string;
+    checklist: string[];
+    code: string;
+  };
   cliIntro: Heading & {
     cards: Feature[];
+    cmd: CommandBlock;
+  };
+  chronicle: Heading & {
+    items: Feature[];
     cmd: CommandBlock;
   };
   cliDiscovery: Heading & {
     items: Feature[];
     cmd: CommandBlock;
   };
+  cliMcp: Heading & {
+    items: Feature[];
+    cmd: CommandBlock;
+  };
   cliExecution: Heading & {
+    items: Feature[];
+    cmd: CommandBlock;
+  };
+  cliPr: Heading & {
     items: Feature[];
     cmd: CommandBlock;
   };
@@ -149,7 +167,7 @@ const en: Translation = {
     badge: 'Webinar deck',
     title: 'GitHub Copilot: Tokens, Tools, and Discipline',
     subtitle:
-      'The move from request-based to token-based pricing changes how every developer should be using Copilot — in the IDE, in the CLI, and with skills.',
+      'The shift from premium requests to usage-based pricing changes how every developer should use Copilot — in the IDE, in the CLI, and with skills.',
     badges: [
       { label: 'Tokens', color: '#60a5fa' },
       { label: 'Context', color: '#22d3ee' },
@@ -158,49 +176,49 @@ const en: Translation = {
     ],
     cmd: {
       label: 'The new mental model',
-      title: 'Every token of context you attach is now on the bill.',
+      title: 'Context size, model choice, and iteration style all show up in cost.',
       commands: [
-        'copilot "explain why this PR is failing" --files src/checkout.ts,logs/run-2031',
+        'Explain why this PR is failing. Context: @src/checkout.ts @logs/run-2031.log',
       ],
       notes: [
-        'Bigger workspace context → bigger token bill, every single turn.',
-        'Premium models multiply the cost — use them when the task earns it.',
-        'Agent logs show tokens, model, tools. Read them.',
+        'More attached context means more cost pressure per turn.',
+        'Larger models are powerful — use them when the task earns it.',
+        'Use /usage, /context, and /chronicle to see the meter.',
       ],
     },
   },
   pricing: {
     eyebrow: 'What changed',
-    title: 'From premium requests to token consumption',
+    title: 'From premium requests to usage-based billing',
     subtitle:
-      "Copilot's billing now reflects the real cost of work: input + output tokens for every turn.",
+      'Copilot is moving toward billing that reflects actual work: input, output, and cached tokens converted to AI credits.',
     before: {
-      label: 'Before',
-      title: 'Request-based',
+      label: 'Legacy model',
+      title: 'Premium requests',
       bullets: [
-        'One chat or agent action ≈ one premium request.',
-        'A short prompt and a huge one cost the same.',
+        'One chat or agent action counted as a premium request.',
+        'A short prompt and a huge one could cost the same.',
         'Loose context had no direct price tag.',
-        'Budgeting meant counting requests, not work.',
+        'Budgeting meant counting requests, not real work.',
       ],
-      footer: 'Easy to reason about, but it hid the real cost of bloated context.',
+      footer: 'Simple, but it hid the cost of bloated context.',
     },
     now: {
-      label: 'Now',
-      title: 'Token-based',
+      label: 'Usage-based model',
+      title: 'Tokens → AI credits',
       bullets: [
-        'Input tokens (your context) + output tokens (the answer) are billed.',
-        'Bigger context, bigger bill — even if the model ignores most of it.',
-        'Premium models charge more per token; agent loops compound it.',
-        'Budgeting tracks tokens per task, not requests per day.',
+        'Input, output, and cached tokens convert to AI credits.',
+        'Bigger context means more cost pressure, even when little of it matters.',
+        'Larger models cost more for the same task.',
+        'Budgeting shifts from requests per day to cost per task.',
       ],
-      footer: 'Specificity and trimmed context are no longer style — they are cost control.',
+      footer: 'Specificity and trimmed context become cost control.',
     },
   },
   impact: {
     eyebrow: 'What it means for you',
-    title: 'Context discipline is now cost discipline',
-    subtitle: 'The habits that already make Copilot smarter also make it cheaper.',
+    title: 'Context discipline becomes cost discipline',
+    subtitle: 'The habits that make Copilot smarter are the same ones that control cost in a usage-based world.',
     items: [
       {
         title: 'Context = cost',
@@ -209,15 +227,15 @@ const en: Translation = {
         color: '#60a5fa',
       },
       {
-        title: 'Sloppy prompts cost twice',
+        title: 'Vague prompts cost twice',
         description:
-          'A vague ask burns tokens on guessing, then again on the correction. Specificity is now a budget tool.',
+          'They burn one turn on guessing and another on repair. Specificity reduces both cost and drift.',
         color: '#c084fc',
       },
       {
-        title: 'Premium models multiply',
+        title: 'Model choice matters',
         description:
-          'Agent mode and frontier models consume more tokens per turn. Reach for them when the task earns it.',
+          'Bigger models and longer agent loops are powerful — and easier to overspend with.',
         color: '#fb7185',
       },
     ],
@@ -229,12 +247,12 @@ const en: Translation = {
   },
   agenda: {
     eyebrow: 'Agenda',
-    title: 'Four habits for the new pricing model',
-    subtitle: 'Move from blind chat to a cost-aware workflow with clear signals at every step.',
+    title: 'Four habits for usage-based Copilot',
+    subtitle: 'Move from blind chat to a workflow with clear signals, narrower context, and lower rework.',
     items: [
       {
         title: 'See the meter',
-        description: 'Read agent logs: how many tokens, which model, which tools, which files.',
+        description: 'Check /usage, /context, and /chronicle: tokens, model, tools, files.',
         color: '#60a5fa',
       },
       {
@@ -249,20 +267,20 @@ const en: Translation = {
       },
       {
         title: 'Use the CLI well',
-        description: 'Fleet, research, squad mode, PR fix — plus the right discipline around skills.',
+        description: 'Inspect with /env, frame with /plan and /research, then ship with /delegate, /fleet, /review, and /pr.',
         color: '#34d399',
       },
     ],
   },
   visibility: {
-    eyebrow: 'Track 1 — Your usage',
-    title: 'Your usage says: use more built-ins',
+    eyebrow: 'Track 1 — Case study',
+    title: 'What your own sessions suggest',
     subtitle:
-      'You already use Copilot well for debugging and UI iteration. The next gain is orchestration: more slash workflows, less replayed context.',
+      'Your history already shows strong debugging and UI iteration. The next gain is orchestration and context control.',
     items: [
       {
-        title: 'Use slash workflows',
-        description: 'Let /research, /plan, /delegate, and /review handle the orchestration.',
+        title: 'Use built-ins first',
+        description: 'Reach for /research, /plan, /delegate, and /review before encoding the workflow in a long prompt.',
         color: '#60a5fa',
       },
       {
@@ -272,23 +290,23 @@ const en: Translation = {
       },
       {
         title: 'Reset after setup',
-        description: 'After research or setup, continue in a fresh thread so polish stays cheap.',
+        description: 'After research or setup, switch to /new or /compact so polish loops stay cheap.',
         color: '#a78bfa',
       },
       {
-        title: 'Reuse context once',
-        description: 'Move repeat workflows into instructions, not huge pasted blobs or giant skills.',
+        title: 'Encode reuse once',
+        description: 'Move repeated workflows into instructions and keep skills narrow and task-specific.',
         color: '#fb7185',
       },
     ],
     cmd: {
       label: 'High-impact moves',
-      title: 'Your biggest upside is less manual orchestration and less context replay.',
-      commands: ['/research', '/plan', '/delegate', '/review', '/chronicle tips', '/chronicle cost-tips'],
+      title: 'The upside is less manual orchestration and less replayed context.',
+      commands: ['/env', '/research', '/plan', '/delegate', '/review', '/new'],
       notes: [
-        'Start with /env to confirm active skills, instructions, and LSP support.',
-        'Use /new after research so screenshot and polish loops stay in a short thread.',
-        'Move SonarQube rules into copilot-instructions and split the large revealjs skill.',
+        'Start with /env to confirm active skills, instructions, and LSPs.',
+        'Pair /research with /share when the result should live outside the main thread.',
+        'Move repeated triage into instructions; keep skills small and task-specific.',
       ],
     },
   },
@@ -363,205 +381,386 @@ Done when:
 - 'npm run build' and 'npm test' are green.
 - Diff is under ~80 lines.`,
   },
+  prdSample: {
+    eyebrow: 'Track 3 — Prompt strategy',
+    title: 'Sample PRD prompt',
+    subtitle: 'The task changes. The structure usually should not.',
+    pillLabel: 'Paste-ready shape',
+    intro:
+      'Ask for one bounded change, the files that matter, the guardrails, and the proof you expect back.',
+    checklist: [
+      'One task, clear scope, one acceptance signal.',
+      'State non-goals before the agent improvises.',
+      'Ask for tests and a short summary with changed files.',
+    ],
+    code: `Task:
+Add a dark mode toggle to the settings page.
+
+Goal:
+Let users switch themes and persist the choice.
+
+Context:
+- UI: src/pages/settings.tsx
+- Theme state: src/theme/theme-context.tsx
+- Stack: React + TypeScript
+
+Constraints:
+- Reuse existing tokens and button styles.
+- No route or navigation changes.
+- No new dependencies.
+
+Output:
+- Start with a 3-step plan.
+- Then implement.
+- End with changed files + risks.
+
+Done when:
+- Toggle works after reload.
+- Existing layout stays unchanged.
+- 'npm run build' and relevant tests pass.`,
+  },
   cliIntro: {
-    eyebrow: 'Track 4 — CLI',
-    title: 'GitHub Copilot CLI',
+    eyebrow: 'Track 4 — CLI command map',
+    title: 'Use the right CLI command for the job',
     subtitle:
-      'An agentic terminal that searches, edits, runs, and explains — all in one thread, with token logs you can actually read.',
+      'Make the CLI section command-first: inspect with /env, frame with /plan, investigate with /research, then choose the right execution path.',
     cards: [
       {
-        title: 'Stays in the terminal',
-        description: 'No tab-flipping. Search, patch, run tests, and explain — without leaving the shell.',
+        title: '/env',
+        description: 'Shows loaded instructions, MCP servers, skills, agents, plugins, LSPs, and extensions.',
         color: '#60a5fa',
       },
       {
-        title: 'Reads its own logs',
-        description: 'Chronicle shows you tokens, tools, and steps for every session you run.',
+        title: '/plan',
+        description: 'Creates an implementation plan before coding. Plan mode is also available with Shift+Tab.',
         color: '#22d3ee',
       },
       {
-        title: 'Composes with git',
-        description:
-          'Lines up cleanly with branches, PRs, and CI — the agent works where your workflow lives.',
+        title: '/research',
+        description: 'Runs deep investigation across your codebase, GitHub, and the web, then saves a cited report.',
         color: '#a78bfa',
       },
       {
-        title: 'Token-aware',
-        description: 'Sessions are scoped, so context does not silently balloon across unrelated tasks.',
+        title: '/delegate',
+        description: 'Hands work to Copilot cloud agent, which creates a branch, opens a draft PR, and continues remotely.',
         color: '#34d399',
       },
     ],
     cmd: {
-      label: 'One ask, many useful moves',
-      title: 'Let the CLI do investigation, patching, and validation in the same flow.',
-      commands: ['copilot "fix the failing checkout workflow and explain the root cause"'],
+      label: 'Current command reality',
+      title: 'Use official current names; not every older or internal label is a top-level slash command.',
+      commands: [
+        '/env',
+        '/plan',
+        '/research TOPIC',
+        '/delegate PROMPT',
+      ],
       notes: [
-        'Start with the failing run, touched files, and constraints to keep the search small.',
-        'Land the fix and run checks from the same thread — no context handoff between tools.',
-        'Watch chronicle to see how many tokens each step actually cost.',
+        '/squad is not a current official slash command in the docs — use /fleet for parallel subagents.',
+        '/pr fix is official, but it lives under /pr rather than as a top-level command.',
+        'Use /help or / to inspect the exact surface of your installed version.',
+      ],
+    },
+  },
+  chronicle: {
+    eyebrow: 'Track 4 — Chronicle',
+    title: 'Chronicle turns session history into shortcuts',
+    subtitle:
+      'Enable experimental mode first, then use Chronicle for standups, personalized tips, instruction tuning, and index repair.',
+    items: [
+      {
+        title: 'Enable it first',
+        description: 'Chronicle is experimental. Start with /experimental on.',
+        color: '#60a5fa',
+      },
+      {
+        title: 'Standup',
+        description: 'Summarizes recent work. The default window is the last 24 hours.',
+        color: '#22d3ee',
+      },
+      {
+        title: 'Tips',
+        description: 'Generates 3-5 personalized recommendations from your real usage patterns.',
+        color: '#a78bfa',
+      },
+      {
+        title: 'Improve',
+        description: 'Suggests repo-specific updates for .github/copilot-instructions.md.',
+        color: '#34d399',
+      },
+    ],
+    cmd: {
+      label: 'Chronicle commands',
+      title: 'Use the picker for discovery or call subcommands directly.',
+      commands: [
+        '/chronicle',
+        '/chronicle standup for the last 3 days',
+        '/chronicle tips for better prompting',
+        '/chronicle improve',
+        '/chronicle reindex',
+      ],
+      notes: [
+        'Enable it first with /experimental on.',
+        '/chronicle opens a picker of available subcommands.',
+        'standup summarizes recent work, branches, and linked PRs/issues.',
+        'tips analyzes prompts, tools, and features you are underusing.',
+        'improve proposes instruction updates; reindex rebuilds the session-store index.',
       ],
     },
   },
   cliDiscovery: {
-    eyebrow: 'Track 4 — CLI features (1/2)',
-    title: 'Discover before you change',
+    eyebrow: 'Track 4 — CLI discovery',
+    title: 'Inspect and frame the work first',
     subtitle:
-      'Fleet, Research, and Chronicle build the context — and the visibility — before any code moves.',
+      'Use /env, /plan, and /research when you need context, structure, or evidence before code changes.',
     items: [
       {
-        title: 'Fleet',
-        description: 'Coordinate parallel investigations across repos without losing the main thread.',
+        title: '/env',
+        description: 'Check what Copilot is already loading before you assume which instructions or skills are active.',
         color: '#60a5fa',
       },
       {
-        title: 'Research',
-        description: 'Pull GitHub history, issues, and web evidence into the working context first.',
+        title: '/plan',
+        description: 'Use it for multi-step work, architecture-sensitive changes, or anything you want decomposed first.',
         color: '#22d3ee',
       },
       {
-        title: 'Chronicle',
-        description: 'Replay sessions, see token usage, and resume from a known good checkpoint.',
+        title: '/research',
+        description: 'Use it when you want a shareable Markdown report with citations, not immediate code edits.',
         color: '#a78bfa',
       },
     ],
     cmd: {
-      label: 'Investigate first',
-      title: 'Pull evidence into the working thread before you touch code.',
-      commands: ['copilot research "why is the nightly job timing out?" --use logs,issues,diff'],
+      label: 'Discovery commands',
+      title: 'These commands are for understanding and shaping the work before implementation.',
+      commands: [
+        '/env',
+        '/plan add retry logic around checkout failures',
+        '/research How is session management implemented in this repo?',
+        '/share file research',
+      ],
       notes: [
-        'Fleet keeps multiple investigations alive without dropping the main thread.',
-        'Research stitches code, issues, and web evidence into one working view.',
-        'Chronicle lets you resume from a known good checkpoint — and audit token cost.',
+        '/env confirms which instructions, skills, agents, and LSPs are actually in play.',
+        '/plan also exists as a mode via Shift+Tab, not just as a slash command.',
+        '/research writes a saved report; pair it with /share when findings should become an artifact.',
+      ],
+    },
+  },
+  cliMcp: {
+    eyebrow: 'Track 4 — MCP hygiene',
+    title: 'Avoid MCP sprawl: enable only the servers and tools you need',
+    subtitle:
+      'Every extra server widens the tool surface. Start with the built-in GitHub MCP server, then add and expose tools intentionally.',
+    items: [
+      {
+        title: 'Don’t collect servers',
+        description:
+          'GitHub MCP is already built in. Add another server only for a real recurring need, not just because it exists in a registry.',
+        color: '#60a5fa',
+      },
+      {
+        title: 'Scope the tool list',
+        description:
+          'During `/mcp add` or `/mcp edit`, prefer a small comma-separated tool list instead of `*`.',
+        color: '#22d3ee',
+      },
+      {
+        title: 'Disable by session',
+        description:
+          'If a server is irrelevant for the task, turn it off with `/mcp disable SERVER-NAME` and bring it back only when needed.',
+        color: '#f59e0b',
+      },
+    ],
+    cmd: {
+      label: 'Intentional MCP commands',
+      title: 'Treat MCP like permissions and context budget, not a sticker collection.',
+      commands: [
+        '/mcp show',
+        '/mcp add',
+        '/mcp edit SERVER-NAME',
+        '/mcp disable SERVER-NAME',
+        '/mcp enable SERVER-NAME',
+      ],
+      notes: [
+        'GitHub MCP server is already available in Copilot CLI — you do not need to add it yourself.',
+        'In `/mcp add` or `/mcp edit`, the Tools field accepts `*` or a comma-separated list; prefer the smaller list.',
+        'Use `/mcp show` or `/env` before starting work so you know which servers and tool surfaces are actually active.',
       ],
     },
   },
   cliExecution: {
-    eyebrow: 'Track 4 — CLI features (2/2)',
-    title: 'Land the change without losing flow',
+    eyebrow: 'Track 4 — CLI execution',
+    title: 'Choose local, remote, or parallel execution',
     subtitle:
-      'Remote, Squad Mode, and PR Fix close the loop from patch to passing CI in one thread.',
+      'Use /delegate, /fleet, and /review when work is implementation-heavy, parallelizable, or needs a safety pass.',
     items: [
       {
-        title: 'Remote',
-        description: 'Run against cloud or sandboxed environments when local context is not enough.',
+        title: '/delegate',
+        description: 'Pushes work to Copilot cloud agent, which creates a branch and draft PR and runs remotely.',
         color: '#34d399',
       },
       {
-        title: 'Squad Mode',
-        description: 'Split a problem across specialized agents, then merge only the useful outcomes.',
+        title: '/fleet',
+        description: 'Runs independent parts of a task in parallel subagents once a plan can be split safely.',
         color: '#f59e0b',
       },
       {
-        title: 'PR Fix',
-        description: 'Triage failing checks, patch the issue, and close the loop from the terminal.',
+        title: '/review',
+        description: 'Runs the code review agent and can be narrowed with a prompt, path, or file pattern.',
         color: '#fb7185',
       },
     ],
     cmd: {
-      label: 'Patch and validate',
-      title: 'Same thread: patch, run, explain, and push the PR fix.',
-      commands: ['copilot pr fix --run "npm test" --explain --push'],
+      label: 'Implement with guardrails',
+      title: 'These commands act on code or changes, so use them deliberately.',
+      commands: [
+        '/delegate complete the API integration tests and fix any failing edge cases',
+        '/fleet implement the approved plan',
+        '/review src/checkout/**',
+      ],
       notes: [
-        'Remote runs in cloud or sandboxed envs when the local repo is not enough.',
-        'Squad Mode splits work across focused agents — merge only the useful outcomes.',
-        'PR Fix triages failing checks, patches, and pushes — with a written rationale.',
+        '/delegate is remote; autopilot is local.',
+        '/fleet works best after a plan exists and tasks are genuinely independent.',
+        '/review is a fast quality pass before commit or after a large refactor.',
+      ],
+    },
+  },
+  cliPr: {
+    eyebrow: 'Track 4 — PR workflows',
+    title: 'Use /pr for pull-request loops',
+    subtitle:
+      'PR creation, feedback fixes, conflict resolution, and CI repair all live under /pr for the current branch.',
+    items: [
+      {
+        title: '/pr create',
+        description: 'Creates or updates the pull request for the current branch.',
+        color: '#60a5fa',
+      },
+      {
+        title: '/pr fix feedback',
+        description: 'Reads review threads and applies actionable requested changes.',
+        color: '#22d3ee',
+      },
+      {
+        title: '/pr fix ci',
+        description: 'Diagnoses failing CI checks, applies targeted fixes, and repeats until green or blocked.',
+        color: '#a78bfa',
+      },
+    ],
+    cmd: {
+      label: 'PR workflow commands',
+      title: 'The /pr family covers view, create, fix, and end-to-end automation.',
+      commands: [
+        '/pr',
+        '/pr create',
+        '/pr fix feedback',
+        '/pr fix conflicts',
+        '/pr fix ci',
+        '/pr fix',
+        '/pr auto',
+      ],
+      notes: [
+        '/pr fix runs feedback, conflicts, then CI in order.',
+        '/pr auto creates the PR if needed, then loops until there are no more comments, conflicts, or failing checks.',
+        'All /pr commands operate on the pull request for the current branch and may commit and push.',
       ],
     },
   },
   skills: {
     eyebrow: 'Track 4 — Skills',
-    title: 'Skills extend what Copilot can do',
+    title: 'Add skills in the repo or in ~/.copilot, then use them on demand',
     subtitle:
-      'A skill is a reusable playbook — prompts, tools, and steps the agent should follow for a recurring task.',
+      'A skill is a folder with `SKILL.md` plus optional scripts or examples. Copilot matches the description, loads it when relevant, and you can still invoke it explicitly.',
     items: [
       {
-        title: 'Reusable playbooks',
-        description: 'Bundle prompts, tools, and steps the agent should always follow for a task.',
+        title: 'Project skill',
+        description:
+          'Create `.github/skills/my-skill/SKILL.md`. Keep the folder name and `name` frontmatter identical; use `description` to tell Copilot when the skill should load.',
         color: '#60a5fa',
       },
       {
-        title: 'Sharper context',
-        description: 'Skills inject focused instructions so you stop re-typing the same setup.',
+        title: 'Personal skill',
+        description:
+          'Create `~/.copilot/skills/my-skill/SKILL.md` to reuse it across repos. Put scripts, templates, and examples next to it and link them from `SKILL.md`.',
         color: '#22d3ee',
       },
       {
-        title: 'Team shareable',
-        description: 'Skills travel through the repo — onboarding and conventions stop living in heads.',
+        title: 'Use it on demand',
+        description:
+          'Copilot can auto-load a matching skill, or you can call `/my-skill` directly. In the CLI, use `/skills list`, `/skills info`, and `/skills reload`.',
         color: '#34d399',
       },
     ],
-    footerLead: 'Use skills',
+    footerLead: 'Rule of thumb:',
     footerBody:
-      ' for the boring, repeated stuff: code review checklists, on-call runbooks, migration steps, PR templates. The agent stops re-learning and you stop re-typing.',
+      ' keep always-on repo guidance in custom instructions, and reserve skills for task-specific workflows. Review third-party skills before trusting scripts or pre-approved tools.',
   },
   skillsRisks: {
-    eyebrow: 'Important — Security',
-    title: 'Be extremely careful installing skills',
+    eyebrow: 'Important — Third-party skills',
+    title: 'Treat community skills like code you install',
     subtitle:
-      'A skill runs with your local permissions. Treat every install like running a script from a stranger — because that is exactly what it is.',
+      'Repo-owned and official skills are useful. Community skills can add instructions, scripts, and external resources, so review them before you trust them.',
     items: [
       {
-        title: 'Run arbitrary commands',
-        description: 'A skill can call shell, scripts, and tools with your local permissions.',
+        title: 'Inspect what they add',
+        description: 'Read the skill files, scripts, and linked resources before first use.',
         color: '#fb7185',
       },
       {
-        title: 'Read your files',
-        description:
-          'Anything in the workspace is reachable — secrets, tokens, customer data included.',
+        title: 'Check the source',
+        description: 'Prefer official orgs or maintainers with clear ownership and recent activity.',
         color: '#f59e0b',
       },
       {
-        title: 'Reach the network',
-        description:
-          'Skills can fetch and exfiltrate. A malicious one will look helpful on the way out.',
+        title: 'Pin and trial first',
+        description: 'Lock a version, test in a safe workspace, and remove it if it adds no value.',
         color: '#fbbf24',
       },
     ],
-    checklistLabel: 'Vetting checklist',
-    checklistTitle: 'Before any skill runs in your repo',
+    checklistLabel: 'Review checklist',
+    checklistTitle: 'Before a third-party skill becomes part of your workflow',
     checklist: [
-      'Trust the source: official org, known maintainer, real activity.',
-      'Read the manifest — every tool, command, and network call it declares.',
-      'Pin a version. Never auto-update skills from the internet.',
-      'Run new skills inside a sandbox or throwaway workspace first.',
-      'Treat it like a dependency: review, log, and remove if unused.',
+      'Start from official docs or trusted repos.',
+      'Read the skill files and any scripts/resources it ships.',
+      'Pin a version before you share it with a team.',
+      'Trial first in a sandbox or throwaway workspace.',
+      'Keep skills small, audited, and removable.',
     ],
   },
   resources: {
     eyebrow: 'Resources',
     title: 'Where to look next',
     subtitle:
-      'A curated starting point — plus a reminder that skills are powerful and deserve scrutiny.',
+      'Start with official docs, then borrow community patterns selectively.',
     awesome: {
-      label: 'Awesome Copilot',
-      title: 'Patterns, prompts, and tools from the community',
+      label: 'GitHub Docs',
+      title: 'Official CLI, billing, and skills docs',
       description:
-        'A curated index of Copilot tips, prompts, configs, and extensions worth borrowing.',
-      domain: 'awesome-copilot.github.com',
+        'The authoritative source for current commands, rollout details, and pricing behavior.',
+      domain: 'docs.github.com/copilot',
     },
     skillsRegistry: {
-      label: 'skills.sh',
-      title: 'A registry of community skills — handle with care',
+      label: 'Community resources',
+      title: 'skills.sh and Awesome Copilot',
       description:
-        'Useful for discovery, but anyone can publish. Vet every skill before you let it run in your repo or terminal.',
-      domain: 'skills.sh',
-      note: 'Read the manifest. Pin the version. Sandbox the first run.',
+        'Useful for discovery, but community content can drift. Check freshness and manifests before adoption.',
+      domain: 'skills.sh • awesome-copilot.github.com',
+      note: 'Start from docs, then borrow selectively.',
     },
   },
   imageTemplate: {
-    title: 'Estimated price based on April usage',
+    title: 'Example snapshot: April usage estimate',
     imageAlt: 'Estimated price image',
   },
   closing: {
     eyebrow: 'Closing',
     title: 'What to remember tomorrow',
-    subtitle: 'Token-based pricing rewards the habits good engineers already wanted to build.',
+    subtitle: 'The shift to usage-based pricing rewards the habits good engineers already wanted to build.',
     items: [
       {
-        title: 'Watch the meter',
+        title: 'Use the meter',
         description:
-          'Read agent logs every day. Tokens, model, and tool calls tell you where the cost lives.',
+          'Check /usage, /context, and /chronicle so you know where cost lives.',
         color: '#60a5fa',
       },
       {
@@ -571,12 +770,12 @@ Done when:
         color: '#c084fc',
       },
       {
-        title: 'Trust, then verify',
-        description: 'CLI and skills are powerful — vet every skill before it runs in your repo.',
+        title: 'Review what you load',
+        description: 'Built-ins are powerful, and third-party additions deserve review before you trust them.',
         color: '#34d399',
       },
     ],
-    callout: 'Narrow context. Sharper prompts. Vetted tools.',
+    callout: 'Narrow context. Sharper prompts. Right built-ins.',
     thanks: 'Thank you.',
   },
 };
@@ -587,7 +786,7 @@ const tr: Translation = {
     badge: 'Webinar sunumu',
     title: 'GitHub Copilot: Token, Araçlar ve Disiplin',
     subtitle:
-      'İstek bazlı fiyatlandırmadan token bazlı fiyatlandırmaya geçiş, her geliştiricinin Copilot\'u nasıl kullanması gerektiğini değiştiriyor — IDE\'de, CLI\'da ve skill\'lerde.',
+      'Premium isteklerden kullanım bazlı fiyatlandırmaya geçiş, her geliştiricinin Copilot\'u nasıl kullanması gerektiğini değiştiriyor — IDE\'de, CLI\'da ve skill\'lerde.',
     badges: [
       { label: 'Tokenlar', color: '#60a5fa' },
       { label: 'Bağlam', color: '#22d3ee' },
@@ -596,49 +795,47 @@ const tr: Translation = {
     ],
     cmd: {
       label: 'Yeni zihinsel model',
-      title: 'Eklediğiniz her token bağlam artık faturanızda.',
-      commands: [
-        'copilot "bu PR neden başarısız oluyor açıkla" --files src/checkout.ts,logs/run-2031',
-      ],
+      title: 'Bağlam boyutu, model seçimi ve iterasyon stili doğrudan maliyete yansır.',
+      commands: ['Bu PR neden başarısız oluyor? Bağlam: @src/checkout.ts @logs/run-2031.log'],
       notes: [
-        'Daha büyük workspace bağlamı → her turda daha büyük token faturası.',
-        'Premium modeller maliyeti katlar — sadece görev hak ettiğinde kullanın.',
-        'Agent logları tokenları, modeli, araçları gösterir. Onları okuyun.',
+        'Eklenen her bağlam parçası, her turda maliyet baskısını artırır.',
+        'Büyük modeller güçlüdür — sadece görev hak ettiğinde kullanın.',
+        '/usage, /context ve /chronicle ile kullanımı takip edin.',
       ],
     },
   },
   pricing: {
     eyebrow: 'Ne değişti',
-    title: 'Premium isteklerden token tüketimine',
+    title: 'Premium isteklerden kullanım bazlı faturalandırmaya',
     subtitle:
-      'Copilot\'un faturalandırması artık işin gerçek maliyetini yansıtıyor: her tur için giriş + çıkış tokenları.',
+      'Copilot, gerçek işi yansıtan bir modele geçiyor: giriş, çıkış ve cache tokenları AI kredilerine dönüşüyor.',
     before: {
-      label: 'Önce',
-      title: 'İstek bazlı',
+      label: 'Eski model',
+      title: 'Premium istekler',
       bullets: [
-        'Bir sohbet veya agent eylemi ≈ bir premium istek.',
-        'Kısa bir prompt ile devasa bir prompt aynı fiyata mal oluyordu.',
+        'Bir sohbet veya agent eylemi premium istek olarak sayılıyordu.',
+        'Kısa bir prompt ile devasa bir prompt benzer maliyete sahip olabiliyordu.',
         'Gevşek bağlamın doğrudan bir fiyat etiketi yoktu.',
-        'Bütçeleme, iş değil, istek saymaktı.',
+        'Bütçeleme, gerçek iş yerine istek saymaktı.',
       ],
-      footer: 'Anlaması kolaydı, ancak şişirilmiş bağlamın gerçek maliyetini gizliyordu.',
+      footer: 'Basitti, ama şişirilmiş bağlamın maliyetini gizliyordu.',
     },
     now: {
-      label: 'Şimdi',
-      title: 'Token bazlı',
+      label: 'Kullanım bazlı model',
+      title: 'Tokenlar → AI kredileri',
       bullets: [
-        'Giriş tokenları (bağlamınız) + çıkış tokenları (cevap) faturalandırılır.',
-        'Daha büyük bağlam, daha büyük fatura — model çoğunu görmezden gelse bile.',
-        'Premium modeller token başına daha pahalı; agent döngüleri bunu katlar.',
-        'Bütçeleme artık günlük istekleri değil, görev başına tokenları takip eder.',
+        'Giriş, çıkış ve cache tokenları AI kredilerine dönüşür.',
+        'Büyük bağlam, azı işe yarasa bile maliyet baskısını artırır.',
+        'Daha büyük modeller aynı görev için daha pahalıdır.',
+        'Bütçeleme, günlük istekten görev başı maliyete kayar.',
       ],
-      footer: 'Belirlilik ve sade bağlam artık stil değil — maliyet kontrolü.',
+      footer: 'Belirlilik ve sade bağlam maliyet kontrolüne dönüşür.',
     },
   },
   impact: {
     eyebrow: 'Sizin için anlamı',
-    title: 'Bağlam disiplini artık maliyet disiplinidir',
-    subtitle: 'Copilot\'u daha akıllı yapan alışkanlıklar onu aynı zamanda daha ucuz da yapar.',
+    title: 'Bağlam disiplini maliyet disiplinine dönüşür',
+    subtitle: 'Copilot\'u daha akıllı yapan alışkanlıklar, kullanım bazlı dünyada maliyeti de kontrol eder.',
     items: [
       {
         title: 'Bağlam = maliyet',
@@ -647,15 +844,15 @@ const tr: Translation = {
         color: '#60a5fa',
       },
       {
-        title: 'Özensiz promptlar iki kat pahalı',
+        title: 'Belirsiz promptlar iki kez yaktırır',
         description:
-          'Belirsiz bir istek önce tahmin için, sonra düzeltme için tokenları yakar. Belirlilik artık bir bütçe aracıdır.',
+          'Bir tur tahmine, bir tur düzeltmeye gider. Belirlilik hem maliyeti hem sapmayı azaltır.',
         color: '#c084fc',
       },
       {
-        title: 'Premium modeller katlar',
+        title: 'Model seçimi önemlidir',
         description:
-          'Agent modu ve frontier modeller tur başına daha fazla token tüketir. Sadece görev hak ettiğinde kullanın.',
+          'Daha büyük modeller ve uzun agent döngüleri güçlüdür — ama fazla harcamak daha kolaydır.',
         color: '#fb7185',
       },
     ],
@@ -667,13 +864,13 @@ const tr: Translation = {
   },
   agenda: {
     eyebrow: 'Gündem',
-    title: 'Yeni fiyatlandırma modeli için dört alışkanlık',
+    title: 'Kullanım bazlı Copilot için dört alışkanlık',
     subtitle:
-      'Kör sohbetten her adımda net sinyallere sahip maliyet bilinçli bir iş akışına geçin.',
+      'Kör sohbetten net sinyalleri, dar bağlamı ve düşük yeniden işi olan bir iş akışına geçin.',
     items: [
       {
-        title: 'Sayacı görün',
-        description: 'Agent loglarını okuyun: kaç token, hangi model, hangi araçlar, hangi dosyalar.',
+        title: 'Kullanımı görün',
+        description: '/usage, /context ve /chronicle ile token, model, araç ve dosyaları görün.',
         color: '#60a5fa',
       },
       {
@@ -688,20 +885,20 @@ const tr: Translation = {
       },
       {
         title: 'CLI\'yı iyi kullanın',
-        description: 'Fleet, research, squad mode, PR fix — ve skill\'ler etrafında doğru disiplin.',
+        description: '/env ile bakın, /plan ve /research ile çerçeveleyin; sonra /delegate, /fleet, /review ve /pr ile teslim edin.',
         color: '#34d399',
       },
     ],
   },
   visibility: {
-    eyebrow: 'Adım 1 — Kendi kullanımın',
-    title: 'Kullanımın şunu söylüyor: yerleşik akışları daha çok kullan',
+    eyebrow: 'Adım 1 — Vaka çalışması',
+    title: 'Kendi oturumların ne söylüyor?',
     subtitle:
-      'Debug ve UI iterasyonunda zaten iyisin. Sıradaki kazanç orkestrasyonda: daha çok slash akışı, daha az tekrar eden bağlam.',
+      'Geçmişin zaten güçlü debug ve UI iterasyonu gösteriyor. Sıradaki kazanç orkestrasyon ve bağlam kontrolü.',
     items: [
       {
-        title: 'Slash akışlarını kullan',
-        description: '/research, /plan, /delegate ve /review ile orkestrasyonu prompt dışına çıkar.',
+        title: 'Önce yerleşik akışlara git',
+        description: 'Akışı uzun promptlara dökmeden önce /research, /plan, /delegate ve /review kullan.',
         color: '#60a5fa',
       },
       {
@@ -711,23 +908,23 @@ const tr: Translation = {
       },
       {
         title: 'Kurulumdan sonra sıfırla',
-        description: 'Araştırma veya kurulumdan sonra yeni bir iş parçacığında devam et; rötuş turları ucuz kalsın.',
+        description: 'Araştırma veya kurulumdan sonra /new ya da /compact kullan; rötuş turları ucuz kalsın.',
         color: '#a78bfa',
       },
       {
-        title: 'Bağlamı bir kez kodla',
-        description: 'Tekrarlanan akışları talimatlara taşı; dev skill ve yapıştırılan raporlarla taşıma.',
+        title: 'Tekrarı bir kez kodla',
+        description: 'Tekrarlanan akışları talimatlara taşı; skill\'leri dar ve görev odaklı tut.',
         color: '#fb7185',
       },
     ],
     cmd: {
       label: 'En yüksek getirili hamleler',
-      title: 'En büyük fırsat: daha az elle orkestrasyon, daha az bağlam tekrarı.',
-      commands: ['/research', '/plan', '/delegate', '/review', '/chronicle tips', '/chronicle cost-tips'],
+      title: 'Kazanç: daha az elle orkestrasyon ve daha az bağlam tekrarı.',
+      commands: ['/env', '/research', '/plan', '/delegate', '/review', '/new'],
       notes: [
-        'Başta /env ile aktif skill, talimat ve LSP desteğini kontrol et.',
-        'Araştırmadan sonra /new kullan; ekran görüntüsü ve rötuş döngülerini kısa bir iş parçacığında tut.',
-        'SonarQube kurallarını copilot-instructions\'a taşı; büyük revealjs skill\'ini böl.',
+        'Başta /env ile aktif skill, talimat ve LSP\'leri kontrol et.',
+        'Araştırma çıktısı konuşma dışında yaşamalıysa /research sonrası /share kullan.',
+        'Tekrarlanan triyajı talimatlara taşı; skill\'leri küçük ve görev odaklı tut.',
       ],
     },
   },
@@ -802,206 +999,387 @@ Bitiş kriteri:
 - 'npm run build' ve 'npm test' yeşil olsun.
 - Diff ~80 satırın altında olsun.`,
   },
+  prdSample: {
+    eyebrow: 'Adım 3 — Prompt stratejisi',
+    title: 'Örnek PRD promptu',
+    subtitle: 'İş değişir. Yapı çoğu zaman değişmez.',
+    pillLabel: 'Yapıştırmaya hazır yapı',
+    intro:
+      'Tek bir sınırlı değişiklik, ilgili dosyalar, kısıtlar ve geri beklediğiniz kanıtı açıkça isteyin.',
+    checklist: [
+      'Tek görev, net kapsam, tek kabul sinyali.',
+      'Agent doğaçlamadan önce non-goal\'ları yazın.',
+      'Test ve değişen dosyalarla kısa özet isteyin.',
+    ],
+    code: `Görev:
+Ayarlar sayfasına dark mode toggle ekle.
+
+Hedef:
+Kullanıcı tema değiştirebilsin ve tercih kalıcı olsun.
+
+Bağlam:
+- UI: src/pages/settings.tsx
+- Tema state'i: src/theme/theme-context.tsx
+- Stack: React + TypeScript
+
+Kısıtlar:
+- Mevcut token ve buton stillerini yeniden kullan.
+- Route veya navigasyonu değiştirme.
+- Yeni bağımlılık ekleme.
+
+Çıktı:
+- Önce 3 adımlı plan ver.
+- Sonra uygula.
+- Sonda değişen dosyaları ve riskleri özetle.
+
+Bitiş kriteri:
+- Toggle reload sonrası çalışsın.
+- Mevcut layout aynı kalsın.
+- 'npm run build' ve ilgili testler geçsin.`,
+  },
   cliIntro: {
-    eyebrow: 'Adım 4 — CLI',
-    title: 'GitHub Copilot CLI',
+    eyebrow: 'Adım 4 — CLI komut haritası',
+    title: 'İş için doğru CLI komutunu kullan',
     subtitle:
-      'Arayan, düzenleyen, çalıştıran ve açıklayan agentik bir terminal — hepsi tek bir konuşmada, gerçekten okuyabileceğiniz token loglarıyla.',
+      'CLI bölümünü komut merkezli düşünün: /env ile bakın, /plan ile çerçeveleyin, /research ile araştırın, sonra doğru çalışma yolunu seçin.',
     cards: [
       {
-        title: 'Terminalde kalır',
-        description: 'Sekme değiştirme yok. Arayın, yamala, testleri çalıştırın ve açıklayın — shell\'den çıkmadan.',
+        title: '/env',
+        description: 'Yüklü talimatları, MCP sunucularını, skill\'leri, agent\'ları, plugin\'leri, LSP\'leri ve uzantıları gösterir.',
         color: '#60a5fa',
       },
       {
-        title: 'Kendi loglarını okur',
-        description: 'Chronicle, çalıştırdığınız her oturum için tokenları, araçları ve adımları gösterir.',
+        title: '/plan',
+        description: 'Kod yazmadan önce uygulama planı oluşturur. Plan modu Shift+Tab ile de açılabilir.',
         color: '#22d3ee',
       },
       {
-        title: 'Git ile birleşir',
-        description:
-          'Branch\'ler, PR\'lar ve CI ile düzgün uyum sağlar — agent iş akışınızın bulunduğu yerde çalışır.',
+        title: '/research',
+        description: 'Kod tabanı, GitHub ve web üzerinde derin araştırma yapar; alıntılı bir rapor kaydeder.',
         color: '#a78bfa',
       },
       {
-        title: 'Token bilinçli',
-        description: 'Oturumlar sınırlandırılmış, böylece bağlam ilgisiz görevler arasında sessizce şişmez.',
+        title: '/delegate',
+        description: 'İşi Copilot cloud agent\'a devreder; branch açar, draft PR oluşturur ve uzaktan devam eder.',
         color: '#34d399',
       },
     ],
     cmd: {
-      label: 'Bir istek, birçok yararlı hamle',
-      title: 'CLI\'nın araştırma, yamama ve doğrulamayı aynı akışta yapmasına izin verin.',
-      commands: ['copilot "başarısız checkout workflow\'unu düzelt ve kök nedeni açıkla"'],
+      label: 'Güncel komut gerçekliği',
+      title: 'Resmi güncel isimleri kullanın; her eski veya iç isim ayrı bir üst düzey slash komut değildir.',
+      commands: [
+        '/env',
+        '/plan',
+        '/research TOPIC',
+        '/delegate PROMPT',
+      ],
       notes: [
-        'Aramayı küçük tutmak için başarısız çalıştırma, dokunulan dosyalar ve kısıtlarla başlayın.',
-        'Düzeltmeyi indirin ve kontrolleri aynı konuşmada çalıştırın — araçlar arası bağlam aktarımı yok.',
-        'Her adımın gerçekten kaç tokena mal olduğunu görmek için chronicle\'ı izleyin.',
+        '/squad şu an dökümanlarda resmi bir slash komut değil — paralel alt-agent için /fleet kullanın.',
+        '/pr fix resmidir, ama üst düzey komut değil; /pr altında yaşar.',
+        'Kurulu sürümünüzdeki yüzeyi görmek için /help veya / kullanın.',
+      ],
+    },
+  },
+  chronicle: {
+    eyebrow: 'Adım 4 — Chronicle',
+    title: 'Chronicle oturum geçmişini kısayollara çevirir',
+    subtitle:
+      'Önce experimental modu açın; sonra Chronicle ile standup, kişisel ipuçları, talimat iyileştirme ve indeks onarımı yapın.',
+    items: [
+      {
+        title: 'Önce aç',
+        description: 'Chronicle şu anda experimental. /experimental on ile başlayın.',
+        color: '#60a5fa',
+      },
+      {
+        title: 'Standup',
+        description: 'Son işleri özetler. Varsayılan zaman penceresi son 24 saattir.',
+        color: '#22d3ee',
+      },
+      {
+        title: 'Tips',
+        description: 'Gerçek kullanım alışkanlıklarınızdan 3-5 kişiselleştirilmiş öneri üretir.',
+        color: '#a78bfa',
+      },
+      {
+        title: 'Improve',
+        description: 'Bu repo için .github/copilot-instructions.md güncelleme önerileri çıkarır.',
+        color: '#34d399',
+      },
+    ],
+    cmd: {
+      label: 'Chronicle komutları',
+      title: 'Keşif için picker açın veya alt komutları doğrudan çağırın.',
+      commands: [
+        '/chronicle',
+        '/chronicle standup for the last 3 days',
+        '/chronicle tips for better prompting',
+        '/chronicle improve',
+        '/chronicle reindex',
+      ],
+      notes: [
+        'Önce /experimental on ile etkinleştirin.',
+        '/chronicle mevcut alt komutlar için picker açar.',
+        'standup son işleri, branchleri ve bağlı PR/issue\'ları özetler.',
+        'tips promptları, araçları ve az kullandığınız özellikleri analiz eder.',
+        'improve talimat önerir; reindex session-store indeksini yeniden kurar.',
       ],
     },
   },
   cliDiscovery: {
-    eyebrow: 'Adım 4 — CLI özellikleri (1/2)',
-    title: 'Değiştirmeden önce keşfedin',
+    eyebrow: 'Adım 4 — CLI keşfi',
+    title: 'Önce bak ve işi çerçevele',
     subtitle:
-      'Fleet, Research ve Chronicle herhangi bir kod değişmeden önce bağlamı — ve görünürlüğü — kurar.',
+      'Kod değişmeden önce bağlam, yapı veya kanıt gerektiğinde /env, /plan ve /research kullan.',
     items: [
       {
-        title: 'Fleet',
-        description: 'Ana konuşmayı kaybetmeden depolar arası paralel araştırmaları koordine eder.',
+        title: '/env',
+        description: 'Hangi talimatların ve skill\'lerin aktif olduğunu varsaymadan önce gerçekten ne yüklü bakın.',
         color: '#60a5fa',
       },
       {
-        title: 'Research',
-        description: 'GitHub geçmişini, issue\'ları ve web kanıtlarını önce çalışma bağlamına çeker.',
+        title: '/plan',
+        description: 'Çok adımlı işler, mimari hassas değişiklikler ve önce bölmek istediğiniz görevler için kullanın.',
         color: '#22d3ee',
       },
       {
-        title: 'Chronicle',
-        description: 'Oturumları tekrar oynatın, token kullanımını görün ve bilinen iyi bir checkpoint\'ten devam edin.',
+        title: '/research',
+        description: 'Hemen kod değil, alıntılı ve paylaşılabilir bir Markdown raporu istediğinizde kullanın.',
         color: '#a78bfa',
       },
     ],
     cmd: {
-      label: 'Önce araştırın',
-      title: 'Koda dokunmadan önce kanıtları çalışma konuşmasına çekin.',
-      commands: ['copilot research "gece çalışan iş neden timeout oluyor?" --use logs,issues,diff'],
+      label: 'Keşif komutları',
+      title: 'Bu komutlar implementasyondan önce anlama ve çerçeveleme içindir.',
+      commands: [
+        '/env',
+        '/plan checkout hatalarına retry logic ekle',
+        '/research Bu repoda session management nasıl çalışıyor?',
+        '/share file research',
+      ],
       notes: [
-        'Fleet, ana konuşmayı bırakmadan birden fazla araştırmayı canlı tutar.',
-        'Research, kodu, issue\'ları ve web kanıtlarını tek bir çalışma görünümüne diker.',
-        'Chronicle, bilinen iyi bir checkpoint\'ten devam etmenize ve token maliyetini denetlemenize olanak tanır.',
+        '/env, hangi talimatların, skill\'lerin, agent\'ların ve LSP\'lerin gerçekten devrede olduğunu doğrular.',
+        '/plan sadece komut değil; Shift+Tab ile açılan bir mod olarak da vardır.',
+        '/research rapor yazar; bulgular artefakt olacaksa /share ile dışarı alın.',
+      ],
+    },
+  },
+  cliMcp: {
+    eyebrow: 'Adım 4 — MCP hijyeni',
+    title: 'MCP yayılımını önleyin: sadece gereken sunucu ve araçları açın',
+    subtitle:
+      'Her ek sunucu araç yüzeyini genişletir. Yerleşik GitHub MCP ile başlayın; yeni sunucu ve araçları bilinçli ekleyin.',
+    items: [
+      {
+        title: 'Sunucu biriktirmeyin',
+        description:
+          'GitHub MCP zaten yerleşik. Registry\'de var diye her sunucuyu eklemeyin; sadece tekrarlayan gerçek ihtiyaçlar için ekleyin.',
+        color: '#60a5fa',
+      },
+      {
+        title: 'Araç listesini daraltın',
+        description:
+          '`/mcp add` veya `/mcp edit` sırasında `*` yerine sadece gereken birkaç araç adını virgülle yazın.',
+        color: '#22d3ee',
+      },
+      {
+        title: 'Oturum bazlı kapatın',
+        description:
+          'Görevle ilgisiz sunucuları `/mcp disable SERVER-NAME` ile kapatın; gerçekten gerekince tekrar açın.',
+        color: '#f59e0b',
+      },
+    ],
+    cmd: {
+      label: 'Bilinçli MCP komutları',
+      title: 'MCP\'yi rozet koleksiyonu değil, izin ve bağlam bütçesi gibi yönetin.',
+      commands: [
+        '/mcp show',
+        '/mcp add',
+        '/mcp edit SERVER-NAME',
+        '/mcp disable SERVER-NAME',
+        '/mcp enable SERVER-NAME',
+      ],
+      notes: [
+        'GitHub MCP sunucusu Copilot CLI içinde zaten hazır gelir; ayrıca eklemeniz gerekmez.',
+        '`/mcp add` veya `/mcp edit` içindeki Tools alanı `*` ya da virgülle ayrılmış araç listesi kabul eder; dar seçin.',
+        'İşe başlamadan önce `/mcp show` veya `/env` ile gerçekten hangi sunucu ve araç yüzeyinin aktif olduğunu görün.',
       ],
     },
   },
   cliExecution: {
-    eyebrow: 'Adım 4 — CLI özellikleri (2/2)',
-    title: 'Akışı kaybetmeden değişikliği bitirin',
+    eyebrow: 'Adım 4 — CLI yürütme',
+    title: 'Yerel, uzak veya paralel yürütmeyi seç',
     subtitle:
-      'Remote, Squad Mode ve PR Fix, yamadan başarılı CI\'ya kadar döngüyü tek bir konuşmada kapatır.',
+      'İş implementasyon ağırlıklıysa, paralelleşebiliyorsa veya güvenlik kontrolü istiyorsa /delegate, /fleet ve /review kullan.',
     items: [
       {
-        title: 'Remote',
-        description: 'Yerel bağlam yetmediğinde bulut veya sandbox ortamlarda çalışır.',
+        title: '/delegate',
+        description: 'İşi Copilot cloud agent\'a yollar; branch ve draft PR açar, uzaktan çalışır.',
         color: '#34d399',
       },
       {
-        title: 'Squad Mode',
-        description: 'Bir problemi uzmanlaşmış agent\'lara böler, sonra sadece yararlı çıktıları birleştirir.',
+        title: '/fleet',
+        description: 'Bir görev güvenle bölünebiliyorsa bağımsız parçaları paralel alt-agent\'larla çalıştırır.',
         color: '#f59e0b',
       },
       {
-        title: 'PR Fix',
-        description: 'Başarısız kontrolleri triyaj eder, sorunu yamar ve terminalden döngüyü kapatır.',
+        title: '/review',
+        description: 'Kod inceleme agent\'ını çalıştırır; prompt, path veya file pattern ile daraltılabilir.',
         color: '#fb7185',
       },
     ],
     cmd: {
-      label: 'Yamayın ve doğrulayın',
-      title: 'Aynı konuşma: yama, çalıştır, açıkla ve PR fix\'i pushla.',
-      commands: ['copilot pr fix --run "npm test" --explain --push'],
+      label: 'Korumalı ilerle',
+      title: 'Bu komutlar koda veya değişikliklere dokunur; bilinçli kullanın.',
+      commands: [
+        '/delegate API integration testlerini tamamla ve uç durumları düzelt',
+        '/fleet onaylanan planı uygula',
+        '/review src/checkout/**',
+      ],
       notes: [
-        'Remote, yerel repo yeterli olmadığında bulut veya sandbox ortamlarda çalışır.',
-        'Squad Mode, işi odaklı agent\'lara böler — sadece yararlı çıktıları birleştirin.',
-        'PR Fix, başarısız kontrolleri triyaj eder, yamar ve pushlar — yazılı gerekçesiyle birlikte.',
+        '/delegate uzaktır; autopilot yereldir.',
+        '/fleet en iyi, ortada plan varken ve görevler gerçekten bağımsızken çalışır.',
+        '/review commit öncesi veya büyük refactor sonrası hızlı kalite geçişidir.',
+      ],
+    },
+  },
+  cliPr: {
+    eyebrow: 'Adım 4 — PR iş akışları',
+    title: '/pr ile pull request döngüsünü yönetin',
+    subtitle:
+      'PR oluşturma, review geri bildirimi, conflict çözümü ve CI onarımı mevcut branch için /pr altında yaşar.',
+    items: [
+      {
+        title: '/pr create',
+        description: 'Mevcut branch için pull request oluşturur veya günceller.',
+        color: '#60a5fa',
+      },
+      {
+        title: '/pr fix feedback',
+        description: 'Review thread\'lerini okur ve uygulanabilir istekleri koda işler.',
+        color: '#22d3ee',
+      },
+      {
+        title: '/pr fix ci',
+        description: 'Başarısız CI kontrollerini teşhis eder, hedefli düzeltmeler yapar ve yeniden dener.',
+        color: '#a78bfa',
+      },
+    ],
+    cmd: {
+      label: 'PR iş akışı komutları',
+      title: '/pr ailesi görüntüleme, oluşturma, düzeltme ve uçtan uca otomasyonu kapsar.',
+      commands: [
+        '/pr',
+        '/pr create',
+        '/pr fix feedback',
+        '/pr fix conflicts',
+        '/pr fix ci',
+        '/pr fix',
+        '/pr auto',
+      ],
+      notes: [
+        '/pr fix sırasıyla feedback, conflicts ve CI aşamalarını çalıştırır.',
+        '/pr auto gerekirse PR oluşturur; sonra yorum, conflict ve CI kalmayana kadar döngüye devam eder.',
+        'Tüm /pr komutları mevcut branch\'in PR\'ı üzerinde çalışır ve commit/push yapabilir.',
       ],
     },
   },
   skills: {
     eyebrow: 'Adım 4 — Skill\'ler',
-    title: 'Skill\'ler Copilot\'un yapabileceklerini genişletir',
+    title: 'Skill\'leri repoya veya ~/.copilot altına ekleyin, gerektiğinde çağırın',
     subtitle:
-      'Skill, yeniden kullanılabilir bir oyun kitabıdır — agent\'ın tekrarlayan bir görev için izlemesi gereken promptlar, araçlar ve adımlar.',
+      'Skill, `SKILL.md` ve isteğe bağlı script ya da örnek dosyaları içeren bir klasördür. Copilot açıklamaya göre eşleştirir, ilgiliyse yükler; isterseniz açıkça siz de çağırabilirsiniz.',
     items: [
       {
-        title: 'Yeniden kullanılabilir playbook\'lar',
-        description: 'Agent\'ın bir görev için her zaman izlemesi gereken promptları, araçları ve adımları paketleyin.',
+        title: 'Repo skill\'i',
+        description:
+          '`.github/skills/my-skill/SKILL.md` oluşturun. Klasör adı ile frontmatter içindeki `name` aynı olsun; `description`, Copilot\'a skill\'in ne zaman yüklenmesi gerektiğini söyler.',
         color: '#60a5fa',
       },
       {
-        title: 'Daha keskin bağlam',
-        description: 'Skill\'ler odaklanmış talimatlar enjekte eder, böylece aynı kurulumu tekrar yazmazsınız.',
+        title: 'Kişisel skill',
+        description:
+          '`~/.copilot/skills/my-skill/SKILL.md` oluşturarak tüm repolarda yeniden kullanın. Script, şablon ve örnekleri yanına koyun; `SKILL.md` içinden link verin.',
         color: '#22d3ee',
       },
       {
-        title: 'Ekiple paylaşılabilir',
-        description: 'Skill\'ler repo üzerinden taşınır — onboarding ve kurallar artık kafalarda yaşamaz.',
+        title: 'İsteyince kullan',
+        description:
+          'Copilot uygun skill\'i otomatik yükleyebilir; isterseniz `/my-skill` ile doğrudan çağırın. CLI tarafında `/skills list`, `/skills info` ve `/skills reload` kullanın.',
         color: '#34d399',
       },
     ],
-    footerLead: 'Skill\'leri kullanın',
+    footerLead: 'Pratik kural:',
     footerBody:
-      ' sıkıcı, tekrarlanan şeyler için: kod inceleme kontrol listeleri, on-call runbook\'ları, migration adımları, PR şablonları. Agent yeniden öğrenmeyi bırakır ve siz yeniden yazmayı bırakırsınız.',
+      ' repo çapında her zaman geçerli kuralları özel talimatlarda tutun; skill\'leri görev-özel akışlar için ayırın. Script veya ön onaylı araç içeren üçüncü taraf skill\'lere incelemeden güvenmeyin.',
   },
   skillsRisks: {
-    eyebrow: 'Önemli — Güvenlik',
-    title: 'Skill yüklerken son derece dikkatli olun',
+    eyebrow: 'Önemli — Üçüncü taraf skill\'ler',
+    title: 'Topluluk skill\'lerini kurduğunuz kod gibi görün',
     subtitle:
-      'Bir skill yerel izinlerinizle çalışır. Her kurulumu bir yabancıdan bir script çalıştırmak gibi görün — çünkü tam olarak budur.',
+      'Repo sahipli ve resmi skill\'ler yararlıdır. Topluluk skill\'leri talimat, script ve dış kaynak ekleyebilir; güvenmeden önce inceleyin.',
     items: [
       {
-        title: 'Keyfi komutları çalıştırır',
-        description: 'Bir skill, yerel izinlerinizle shell\'i, scriptleri ve araçları çağırabilir.',
+        title: 'Ne eklediğini incele',
+        description: 'İlk kullanımdan önce skill dosyalarını, scriptleri ve bağlı kaynakları okuyun.',
         color: '#fb7185',
       },
       {
-        title: 'Dosyalarınızı okur',
-        description:
-          'Workspace\'teki her şey erişilebilir — secret\'lar, tokenlar ve müşteri verileri dahil.',
+        title: 'Kaynağı kontrol et',
+        description: 'Sahipliği net, aktif resmi organizasyonları veya maintainer\'ları tercih edin.',
         color: '#f59e0b',
       },
       {
-        title: 'Ağa erişir',
-        description:
-          'Skill\'ler veri çekebilir ve sızdırabilir. Kötü niyetli olan, çıkışa kadar yardımcı görünecektir.',
+        title: 'Önce sabitle ve dene',
+        description: 'Sürümü kilitleyin, güvenli bir workspace\'te deneyin ve değer katmıyorsa kaldırın.',
         color: '#fbbf24',
       },
     ],
-    checklistLabel: 'Kontrol listesi',
-    checklistTitle: 'Repo\'nuzda herhangi bir skill çalıştırmadan önce',
+    checklistLabel: 'İnceleme listesi',
+    checklistTitle: 'Üçüncü taraf bir skill iş akışınıza girmeden önce',
     checklist: [
-      'Kaynağa güvenin: resmi organizasyon, bilinen maintainer, gerçek aktivite.',
-      'Manifest\'i okuyun — bildirdiği her aracı, komutu ve ağ çağrısını.',
-      'Bir sürümü sabitleyin. Skill\'leri internetten asla otomatik güncellemeyin.',
-      'Yeni skill\'leri önce sandbox veya geçici bir workspace\'te çalıştırın.',
-      'Bunu bir bağımlılık gibi görün: inceleyin, loglayın ve kullanılmıyorsa kaldırın.',
+      'Resmi dökümantasyon veya güvenilir repolardan başlayın.',
+      'Skill dosyalarını ve taşıdığı script/kaynakları okuyun.',
+      'Ekiple paylaşmadan önce sürümü sabitleyin.',
+      'Önce sandbox veya geçici workspace\'te deneyin.',
+      'Skill\'leri küçük, denetlenmiş ve çıkarılabilir tutun.',
     ],
   },
   resources: {
     eyebrow: 'Kaynaklar',
     title: 'Bundan sonra nereye bakmalı',
     subtitle:
-      'Seçilmiş bir başlangıç noktası — artı skill\'lerin güçlü olduğu ve incelemeyi hak ettiği hatırlatması.',
+      'Önce resmi dökümantasyondan başlayın, sonra topluluk kalıplarını seçerek alın.',
     awesome: {
-      label: 'Awesome Copilot',
-      title: 'Topluluktan kalıplar, promptlar ve araçlar',
+      label: 'GitHub Docs',
+      title: 'Resmi CLI, faturalandırma ve skill dökümanları',
       description:
-        'Ödünç almaya değer Copilot ipuçları, promptları, konfigürasyonları ve eklentilerinin seçilmiş bir dizini.',
-      domain: 'awesome-copilot.github.com',
+        'Güncel komutlar, geçiş detayları ve fiyatlandırma davranışı için yetkili kaynak.',
+      domain: 'docs.github.com/copilot',
     },
     skillsRegistry: {
-      label: 'skills.sh',
-      title: 'Topluluk skill\'lerinin bir kaydı — dikkatli kullanın',
+      label: 'Topluluk kaynakları',
+      title: 'skills.sh ve Awesome Copilot',
       description:
-        'Keşif için yararlı, ancak herkes yayınlayabilir. Repo\'nuzda veya terminalde çalıştırmadan önce her skill\'i inceleyin.',
-      domain: 'skills.sh',
-      note: 'Manifest\'i okuyun. Sürümü sabitleyin. İlk çalıştırmayı sandbox\'layın.',
+        'Keşif için faydalıdır, ama topluluk içeriği eskimeye açıktır. Benimsemeden önce tazeliği ve manifestleri kontrol edin.',
+      domain: 'skills.sh • awesome-copilot.github.com',
+      note: 'Önce docs, sonra seçerek ödünç alın.',
     },
   },
   imageTemplate: {
-    title: 'Nisan kullanımına dayalı tahmini fiyat',
+    title: 'Örnek görüntü: Nisan kullanım tahmini',
     imageAlt: 'Tahmini fiyat görseli',
   },
   closing: {
     eyebrow: 'Kapanış',
     title: 'Yarın hatırlanacak şeyler',
     subtitle:
-      'Token bazlı fiyatlandırma, iyi mühendislerin zaten geliştirmek istediği alışkanlıkları ödüllendirir.',
+      'Kullanım bazlı fiyatlandırmaya geçiş, iyi mühendislerin zaten kurmak istediği alışkanlıkları ödüllendirir.',
     items: [
       {
-        title: 'Sayacı izleyin',
+        title: 'Sayacı kullan',
         description:
-          'Agent loglarını her gün okuyun. Tokenlar, model ve araç çağrıları maliyetin nerede olduğunu söyler.',
+          '/usage, /context ve /chronicle ile maliyetin nerede yaşadığını görün.',
         color: '#60a5fa',
       },
       {
@@ -1011,12 +1389,12 @@ Bitiş kriteri:
         color: '#c084fc',
       },
       {
-        title: 'Güvenin, sonra doğrulayın',
-        description: 'CLI ve skill\'ler güçlüdür — repo\'nuzda çalıştırmadan önce her skill\'i inceleyin.',
+        title: 'Yüklediklerini gözden geçir',
+        description: 'Yerleşik akışlar güçlüdür; üçüncü taraf eklentiler güvenmeden önce inceleme ister.',
         color: '#34d399',
       },
     ],
-    callout: 'Dar bağlam. Keskin promptlar. İncelenmiş araçlar.',
+    callout: 'Dar bağlam. Keskin promptlar. Doğru yerleşikler.',
     thanks: 'Teşekkürler.',
   },
 };
