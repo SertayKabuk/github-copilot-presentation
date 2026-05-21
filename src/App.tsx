@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Code, Deck, Fragment, Slide } from '@revealjs/react';
 import RevealHighlight from 'reveal.js/plugin/highlight';
+import estimatedScreenshot from './assets/estimated.png';
 import { LanguageProvider, useLang, type Feature } from './i18n';
 
 type SectionHeadingProps = {
@@ -31,6 +32,12 @@ type SlideShellProps = {
   className?: string;
 };
 
+type ImageTemplateSlideProps = {
+  title: string;
+  imageSrc: string;
+  imageAlt: string;
+};
+
 type FloatingOrbProps = {
   color: string;
   className: string;
@@ -41,7 +48,7 @@ type CommandPanelProps = {
   label: string;
   accent: string;
   title: string;
-  command: string;
+  commands: string[];
   notes: string[];
   className?: string;
   dataId?: string;
@@ -195,7 +202,7 @@ function CommandPanel({
   label,
   accent,
   title,
-  command,
+  commands,
   notes,
   className,
   dataId,
@@ -218,10 +225,12 @@ function CommandPanel({
             <span className="h-2.5 w-2.5 rounded-full bg-amber-300/80" />
             <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
           </div>
-          <div className="flex items-start gap-3">
-            <span className="pt-0.5 text-slate-500">$</span>
-            <span className="leading-relaxed text-slate-100">{command}</span>
-          </div>
+          {commands.map((command) => (
+            <div className="flex items-start gap-3" key={command}>
+              <span className="pt-0.5 text-slate-500">$</span>
+              <span className="leading-relaxed text-slate-100">{command}</span>
+            </div>
+          ))}
         </div>
 
         <div className="mt-4 space-y-2.5">
@@ -256,8 +265,7 @@ function ComparePanel({ label, accent, title, bullets, footer, className }: Comp
       <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
       <div className="relative z-10 flex h-full flex-col">
         <AccentPill label={label} color={accent} className="tracking-[0.22em]" />
-        <h3 className="mt-3 !text-[1.35rem] !font-semibold !leading-[1.18] text-white">{title}</h3>
-
+        <h3 className="mt-3 !text-[1.35rem] !font-semibold !leading-[1.18] text-white"><br />{title}</h3>
         <div className="mt-4 space-y-2.5">
           {bullets.map((item) => (
             <div
@@ -311,6 +319,26 @@ function LanguageToggle() {
         {t.toggle.en}
       </button>
     </div>
+  );
+}
+
+function ImageTemplateSlide({ title, imageSrc, imageAlt }: ImageTemplateSlideProps) {
+  return (
+    <Slide data-background-gradient="radial-gradient(circle at 18% 18%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(168,85,247,0.12), transparent 24%)">
+      <SlideShell className="min-h-[34rem]">
+        <div className="relative z-10 flex min-h-[30rem] flex-col">
+          <h2 className="!text-[2.7rem] !font-black !leading-[1.04] text-white">{title}</h2>
+
+          <div className="mt-6 flex flex-1 items-center justify-center overflow-hidden rounded-[1.9rem] border border-white/10 bg-slate-950/55 p-4 shadow-2xl">
+            <img
+              src={imageSrc}
+              alt={imageAlt}
+              className="max-h-[26rem] w-full rounded-[1.25rem] object-contain"
+            />
+          </div>
+        </div>
+      </SlideShell>
+    </Slide>
   );
 }
 
@@ -392,7 +420,7 @@ function Presentation() {
                     label={t.hero.cmd.label}
                     accent="#38bdf8"
                     title={t.hero.cmd.title}
-                    command={t.hero.cmd.command}
+                    commands={t.hero.cmd.commands}
                     notes={t.hero.cmd.notes}
                   />
                 </div>
@@ -400,6 +428,13 @@ function Presentation() {
             </div>
           </SlideShell>
         </Slide>
+
+        {/* Slide 15 — Image template (duplicate this block and replace title / imageSrc) */}
+        <ImageTemplateSlide
+          title={t.imageTemplate.title}
+          imageSrc={estimatedScreenshot}
+          imageAlt={t.imageTemplate.imageAlt}
+        />
 
         {/* Slide 2 — Pricing shift */}
         <Slide data-background-gradient="radial-gradient(circle at 20% 18%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 82% 18%, rgba(251,113,133,0.14), transparent 26%)">
@@ -495,7 +530,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 5 — See your usage */}
+        {/* Slide 5 — Personalized usage advice */}
         <Slide data-background-gradient="radial-gradient(circle at 18% 16%, rgba(96,165,250,0.16), transparent 28%), radial-gradient(circle at 84% 16%, rgba(34,211,238,0.10), transparent 24%)">
           <SlideShell>
             <div className="relative z-10">
@@ -521,7 +556,7 @@ function Presentation() {
                   label={t.visibility.cmd.label}
                   accent="#60a5fa"
                   title={t.visibility.cmd.title}
-                  command={t.visibility.cmd.command}
+                  commands={t.visibility.cmd.commands}
                   notes={t.visibility.cmd.notes}
                 />
               </div>
@@ -690,7 +725,7 @@ function Presentation() {
                   label={t.cliIntro.cmd.label}
                   accent="#38bdf8"
                   title={t.cliIntro.cmd.title}
-                  command={t.cliIntro.cmd.command}
+                  commands={t.cliIntro.cmd.commands}
                   notes={t.cliIntro.cmd.notes}
                 />
               </div>
@@ -713,7 +748,7 @@ function Presentation() {
                   label={t.cliDiscovery.cmd.label}
                   accent="#22d3ee"
                   title={t.cliDiscovery.cmd.title}
-                  command={t.cliDiscovery.cmd.command}
+                  commands={t.cliDiscovery.cmd.commands}
                   notes={t.cliDiscovery.cmd.notes}
                 />
 
@@ -758,7 +793,7 @@ function Presentation() {
                   label={t.cliExecution.cmd.label}
                   accent="#34d399"
                   title={t.cliExecution.cmd.title}
-                  command={t.cliExecution.cmd.command}
+                  commands={t.cliExecution.cmd.commands}
                   notes={t.cliExecution.cmd.notes}
                 />
               </div>
@@ -918,7 +953,7 @@ function Presentation() {
           </SlideShell>
         </Slide>
 
-        {/* Slide 15 — Closing */}
+        {/* Slide 16 — Closing */}
         <Slide data-background-gradient="radial-gradient(circle at 50% 85%, rgba(59,130,246,0.12), transparent 28%), radial-gradient(circle at 18% 20%, rgba(168,85,247,0.12), transparent 24%), radial-gradient(circle at 82% 18%, rgba(52,211,153,0.10), transparent 22%)">
           <SlideShell className="min-h-[34rem] flex flex-col justify-center">
             <FloatingOrb color="rgba(59,130,246,0.32)" className="left-6 top-8 h-44 w-44" />

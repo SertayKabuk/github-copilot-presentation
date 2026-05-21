@@ -34,7 +34,7 @@ export type Badge = {
 export type CommandBlock = {
   label: string;
   title: string;
-  command: string;
+  commands: string[];
   notes: string[];
 };
 
@@ -129,6 +129,10 @@ export type Translation = {
     awesome: ResourceCard;
     skillsRegistry: ResourceCard;
   };
+  imageTemplate: {
+    title: string;
+    imageAlt: string;
+  };
   closing: Heading & {
     items: Feature[];
     callout: string;
@@ -155,8 +159,9 @@ const en: Translation = {
     cmd: {
       label: 'The new mental model',
       title: 'Every token of context you attach is now on the bill.',
-      command:
+      commands: [
         'copilot "explain why this PR is failing" --files src/checkout.ts,logs/run-2031',
+      ],
       notes: [
         'Bigger workspace context → bigger token bill, every single turn.',
         'Premium models multiply the cost — use them when the task earns it.',
@@ -250,41 +255,40 @@ const en: Translation = {
     ],
   },
   visibility: {
-    eyebrow: 'Track 1 — Visibility',
-    title: 'Read the agent logs every day',
+    eyebrow: 'Track 1 — Your usage',
+    title: 'Your usage says: use more built-ins',
     subtitle:
-      'Before tuning the engine, look at the meter. The agent already tells you what it cost and what it did.',
+      'You already use Copilot well for debugging and UI iteration. The next gain is orchestration: more slash workflows, less replayed context.',
     items: [
       {
-        title: 'Token totals',
-        description: 'Input + output per turn. Watch the run-rate, not just the final answer.',
+        title: 'Use slash workflows',
+        description: 'Let /research, /plan, /delegate, and /review handle the orchestration.',
         color: '#60a5fa',
       },
       {
-        title: 'Model in use',
-        description: 'Frontier vs. mini matters. A small task on a big model is a quiet leak.',
+        title: 'Front-load the spec',
+        description: 'Put constraints, keep/remove rules, and acceptance criteria in turn one.',
         color: '#22d3ee',
       },
       {
-        title: 'Tool calls',
-        description:
-          'Each search, read, or run is a turn. Loops without progress are the expensive failure mode.',
+        title: 'Reset after setup',
+        description: 'After research or setup, continue in a fresh thread so polish stays cheap.',
         color: '#a78bfa',
       },
       {
-        title: 'Files touched',
-        description: 'If the agent reads files you did not need, your context was too broad.',
+        title: 'Reuse context once',
+        description: 'Move repeat workflows into instructions, not huge pasted blobs or giant skills.',
         color: '#fb7185',
       },
     ],
     cmd: {
-      label: 'Where to look',
-      title: 'Agent logs surface tokens, model, tools, and files in every run.',
-      command: 'copilot logs --last 1 --show tokens,tools,files',
+      label: 'High-impact moves',
+      title: 'Your biggest upside is less manual orchestration and less context replay.',
+      commands: ['/research', '/plan', '/delegate', '/review', '/chronicle tips', '/chronicle cost-tips'],
       notes: [
-        'In the CLI: open chronicle to see token totals and tool calls for the last session.',
-        'In the IDE: check the agent panel — model name, token count, and steps per turn.',
-        'On the org side: usage dashboards aggregate per-user token spend across surfaces.',
+        'Start with /env to confirm active skills, instructions, and LSP support.',
+        'Use /new after research so screenshot and polish loops stay in a short thread.',
+        'Move SonarQube rules into copilot-instructions and split the large revealjs skill.',
       ],
     },
   },
@@ -390,7 +394,7 @@ Done when:
     cmd: {
       label: 'One ask, many useful moves',
       title: 'Let the CLI do investigation, patching, and validation in the same flow.',
-      command: 'copilot "fix the failing checkout workflow and explain the root cause"',
+      commands: ['copilot "fix the failing checkout workflow and explain the root cause"'],
       notes: [
         'Start with the failing run, touched files, and constraints to keep the search small.',
         'Land the fix and run checks from the same thread — no context handoff between tools.',
@@ -423,7 +427,7 @@ Done when:
     cmd: {
       label: 'Investigate first',
       title: 'Pull evidence into the working thread before you touch code.',
-      command: 'copilot research "why is the nightly job timing out?" --use logs,issues,diff',
+      commands: ['copilot research "why is the nightly job timing out?" --use logs,issues,diff'],
       notes: [
         'Fleet keeps multiple investigations alive without dropping the main thread.',
         'Research stitches code, issues, and web evidence into one working view.',
@@ -456,7 +460,7 @@ Done when:
     cmd: {
       label: 'Patch and validate',
       title: 'Same thread: patch, run, explain, and push the PR fix.',
-      command: 'copilot pr fix --run "npm test" --explain --push',
+      commands: ['copilot pr fix --run "npm test" --explain --push'],
       notes: [
         'Remote runs in cloud or sandboxed envs when the local repo is not enough.',
         'Squad Mode splits work across focused agents — merge only the useful outcomes.',
@@ -545,6 +549,10 @@ Done when:
       note: 'Read the manifest. Pin the version. Sandbox the first run.',
     },
   },
+  imageTemplate: {
+    title: 'Estimated price based on April usage',
+    imageAlt: 'Estimated price image',
+  },
   closing: {
     eyebrow: 'Closing',
     title: 'What to remember tomorrow',
@@ -589,8 +597,9 @@ const tr: Translation = {
     cmd: {
       label: 'Yeni zihinsel model',
       title: 'Eklediğiniz her token bağlam artık faturanızda.',
-      command:
+      commands: [
         'copilot "bu PR neden başarısız oluyor açıkla" --files src/checkout.ts,logs/run-2031',
+      ],
       notes: [
         'Daha büyük workspace bağlamı → her turda daha büyük token faturası.',
         'Premium modeller maliyeti katlar — sadece görev hak ettiğinde kullanın.',
@@ -685,41 +694,40 @@ const tr: Translation = {
     ],
   },
   visibility: {
-    eyebrow: 'Adım 1 — Görünürlük',
-    title: 'Agent loglarını her gün okuyun',
+    eyebrow: 'Adım 1 — Kendi kullanımın',
+    title: 'Kullanımın şunu söylüyor: yerleşik akışları daha çok kullan',
     subtitle:
-      'Motoru ayarlamadan önce sayaca bakın. Agent size ne kadar maliyete sebep olduğunu ve ne yaptığını zaten söylüyor.',
+      'Debug ve UI iterasyonunda zaten iyisin. Sıradaki kazanç orkestrasyonda: daha çok slash akışı, daha az tekrar eden bağlam.',
     items: [
       {
-        title: 'Token toplamları',
-        description: 'Tur başına giriş + çıkış. Sadece nihai cevabı değil, akış hızını izleyin.',
+        title: 'Slash akışlarını kullan',
+        description: '/research, /plan, /delegate ve /review ile orkestrasyonu prompt dışına çıkar.',
         color: '#60a5fa',
       },
       {
-        title: 'Kullanılan model',
-        description: 'Frontier ile mini farkı önemli. Büyük modelde küçük bir görev sessiz bir sızıntıdır.',
+        title: 'Spesifikasyonu öne çek',
+        description: 'Kısıtları, korunacak/çıkarılacak kuralları ve kabul kriterini ilk turda ver.',
         color: '#22d3ee',
       },
       {
-        title: 'Araç çağrıları',
-        description:
-          'Her arama, okuma veya çalıştırma bir turdur. İlerleme olmayan döngüler en pahalı hata modudur.',
+        title: 'Kurulumdan sonra sıfırla',
+        description: 'Araştırma veya kurulumdan sonra yeni bir iş parçacığında devam et; rötuş turları ucuz kalsın.',
         color: '#a78bfa',
       },
       {
-        title: 'Dokunulan dosyalar',
-        description: 'Agent ihtiyacınız olmayan dosyaları okuyorsa, bağlamınız çok genişti.',
+        title: 'Bağlamı bir kez kodla',
+        description: 'Tekrarlanan akışları talimatlara taşı; dev skill ve yapıştırılan raporlarla taşıma.',
         color: '#fb7185',
       },
     ],
     cmd: {
-      label: 'Nereye bakmalı',
-      title: 'Agent logları her çalıştırmada tokenları, modeli, araçları ve dosyaları yüzeye çıkarır.',
-      command: 'copilot logs --last 1 --show tokens,tools,files',
+      label: 'En yüksek getirili hamleler',
+      title: 'En büyük fırsat: daha az elle orkestrasyon, daha az bağlam tekrarı.',
+      commands: ['/research', '/plan', '/delegate', '/review', '/chronicle tips', '/chronicle cost-tips'],
       notes: [
-        'CLI\'da: son oturumun token toplamlarını ve araç çağrılarını görmek için chronicle\'ı açın.',
-        'IDE\'de: agent panelini kontrol edin — model adı, token sayısı ve tur başına adımlar.',
-        'Organizasyon tarafında: kullanım panoları yüzeyler arasında kullanıcı başına token harcamasını toplar.',
+        'Başta /env ile aktif skill, talimat ve LSP desteğini kontrol et.',
+        'Araştırmadan sonra /new kullan; ekran görüntüsü ve rötuş döngülerini kısa bir iş parçacığında tut.',
+        'SonarQube kurallarını copilot-instructions\'a taşı; büyük revealjs skill\'ini böl.',
       ],
     },
   },
@@ -825,7 +833,7 @@ Bitiş kriteri:
     cmd: {
       label: 'Bir istek, birçok yararlı hamle',
       title: 'CLI\'nın araştırma, yamama ve doğrulamayı aynı akışta yapmasına izin verin.',
-      command: 'copilot "başarısız checkout workflow\'unu düzelt ve kök nedeni açıkla"',
+      commands: ['copilot "başarısız checkout workflow\'unu düzelt ve kök nedeni açıkla"'],
       notes: [
         'Aramayı küçük tutmak için başarısız çalıştırma, dokunulan dosyalar ve kısıtlarla başlayın.',
         'Düzeltmeyi indirin ve kontrolleri aynı konuşmada çalıştırın — araçlar arası bağlam aktarımı yok.',
@@ -858,7 +866,7 @@ Bitiş kriteri:
     cmd: {
       label: 'Önce araştırın',
       title: 'Koda dokunmadan önce kanıtları çalışma konuşmasına çekin.',
-      command: 'copilot research "gece çalışan iş neden timeout oluyor?" --use logs,issues,diff',
+      commands: ['copilot research "gece çalışan iş neden timeout oluyor?" --use logs,issues,diff'],
       notes: [
         'Fleet, ana konuşmayı bırakmadan birden fazla araştırmayı canlı tutar.',
         'Research, kodu, issue\'ları ve web kanıtlarını tek bir çalışma görünümüne diker.',
@@ -891,7 +899,7 @@ Bitiş kriteri:
     cmd: {
       label: 'Yamayın ve doğrulayın',
       title: 'Aynı konuşma: yama, çalıştır, açıkla ve PR fix\'i pushla.',
-      command: 'copilot pr fix --run "npm test" --explain --push',
+      commands: ['copilot pr fix --run "npm test" --explain --push'],
       notes: [
         'Remote, yerel repo yeterli olmadığında bulut veya sandbox ortamlarda çalışır.',
         'Squad Mode, işi odaklı agent\'lara böler — sadece yararlı çıktıları birleştirin.',
@@ -979,6 +987,10 @@ Bitiş kriteri:
       domain: 'skills.sh',
       note: 'Manifest\'i okuyun. Sürümü sabitleyin. İlk çalıştırmayı sandbox\'layın.',
     },
+  },
+  imageTemplate: {
+    title: 'Nisan kullanımına dayalı tahmini fiyat',
+    imageAlt: 'Tahmini fiyat görseli',
   },
   closing: {
     eyebrow: 'Kapanış',
