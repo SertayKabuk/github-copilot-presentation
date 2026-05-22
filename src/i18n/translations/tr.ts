@@ -96,7 +96,7 @@ const tr: Translation = {
       },
       {
         title: 'Bağlamı ayarlayın',
-        description: 'Daha az açın, daha keskin gösterin. Bağlam penceresini sırt çantası değil bütçe olarak görün.',
+        description: 'Daha net, daha nokta atışı. Bağlam penceresini sırt çantası değil bütçe olarak görün.',
         color: '#22d3ee',
       },
       {
